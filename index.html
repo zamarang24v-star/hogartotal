@@ -7,9 +7,6 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0f172a">
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Firebase App y Database SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   <style>
     body { background-color: #0b0f19; color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
     .card-dark { background: #161e2e; border: 1px solid #243046; }
@@ -19,7 +16,6 @@
 </head>
 <body class="pb-24">
 
-  <!-- ENCABEZADO -->
   <header class="p-4 flex justify-between items-center border-b border-slate-800 bg-slate-900/50 sticky top-0 backdrop-blur z-50">
     <div class="flex items-center space-x-3">
       <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center font-bold text-lg text-white">HT</div>
@@ -28,23 +24,18 @@
         <p class="text-xs text-slate-400">ESPACIO DE PAREJA</p>
       </div>
     </div>
-    <div id="sync-status" class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse" title="Sincronizado"></div>
+    <div class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse" title="Activo"></div>
   </header>
 
-  <!-- CONTENIDO PRINCIPAL -->
   <main class="p-4 max-w-lg mx-auto space-y-6">
 
-    <!-- Tarjeta Saludo -->
     <div class="rounded-2xl p-5 bg-gradient-to-r from-indigo-900 to-purple-900 border border-indigo-700/50 shadow-lg">
-      <span class="text-xs font-semibold px-2.5 py-1 bg-indigo-500/30 text-indigo-200 rounded-full">¡Sincronizado en vivo! ⚡</span>
+      <span class="text-xs font-semibold px-2.5 py-1 bg-indigo-500/30 text-indigo-200 rounded-full">Panel Personal ⚡</span>
       <h2 class="text-2xl font-bold mt-2">¡Hola de nuevo!</h2>
-      <p class="text-sm text-indigo-200 mt-1">Todo listo y sincronizado en vuestro hogar.</p>
+      <p class="text-sm text-indigo-200 mt-1">Todo listo en vuestro hogar.</p>
     </div>
 
-    <!-- SECCIÓN: SELECCIÓN / PANELES -->
     <div class="grid grid-cols-2 gap-3">
-      
-      <!-- Compra -->
       <button onclick="mostrarSeccion('compra')" class="card-dark p-4 rounded-2xl text-left hover:border-emerald-500 transition">
         <div class="flex justify-between items-start mb-2">
           <span class="text-2xl">🛒</span>
@@ -54,7 +45,6 @@
         <p class="text-xs text-slate-400">Pendientes</p>
       </button>
 
-      <!-- Gastos -->
       <button onclick="mostrarSeccion('gastos')" class="card-dark p-4 rounded-2xl text-left hover:border-indigo-500 transition">
         <div class="flex justify-between items-start mb-2">
           <span class="text-2xl">👛</span>
@@ -64,7 +54,6 @@
         <p class="text-xs text-slate-400">Total registrado</p>
       </button>
 
-      <!-- Agenda -->
       <button onclick="mostrarSeccion('agenda')" class="card-dark p-4 rounded-2xl text-left hover:border-amber-500 transition">
         <div class="flex justify-between items-start mb-2">
           <span class="text-2xl">📅</span>
@@ -74,7 +63,6 @@
         <p class="text-xs text-slate-400">Próximos eventos</p>
       </button>
 
-      <!-- Coche -->
       <button onclick="mostrarSeccion('coche')" class="card-dark p-4 rounded-2xl text-left hover:border-rose-500 transition">
         <div class="flex justify-between items-start mb-2">
           <span class="text-2xl">🚗</span>
@@ -83,13 +71,10 @@
         <h3 class="font-bold text-base">Coche</h3>
         <p class="text-xs text-slate-400">Aparcamiento</p>
       </button>
-
     </div>
 
-    <!-- VISTA DETALLADA SEGÚN SECCIÓN -->
     <div id="panel-detalle" class="card-dark rounded-2xl p-4 space-y-4">
       
-      <!-- MÓDULO COMPRA -->
       <div id="mod-compra" class="space-y-4">
         <h3 class="font-bold text-lg text-emerald-400 flex items-center gap-2">🛒 Lista de la Compra</h3>
         <div class="flex gap-2">
@@ -99,7 +84,6 @@
         <ul id="lista-compra" class="space-y-2 text-sm"></ul>
       </div>
 
-      <!-- MÓDULO GASTOS -->
       <div id="mod-gastos" class="space-y-4 hidden">
         <h3 class="font-bold text-lg text-indigo-400 flex items-center gap-2">👛 Registro de Gastos</h3>
         <div class="grid grid-cols-2 gap-2">
@@ -110,7 +94,6 @@
         <ul id="lista-gastos" class="space-y-2 text-sm"></ul>
       </div>
 
-      <!-- MÓDULO AGENDA -->
       <div id="mod-agenda" class="space-y-4 hidden">
         <h3 class="font-bold text-lg text-amber-400 flex items-center gap-2">📅 Agenda Compartida</h3>
         <div class="space-y-2">
@@ -121,11 +104,10 @@
         <ul id="lista-agenda" class="space-y-2 text-sm"></ul>
       </div>
 
-      <!-- MÓDULO COCHE -->
       <div id="mod-coche" class="space-y-4 hidden">
         <h3 class="font-bold text-lg text-rose-400 flex items-center gap-2">🚗 Aparcamiento del Coche</h3>
         <p class="text-xs text-slate-400">Guarda la ubicación actual para encontrarlo más tarde.</p>
-        <input type="text" id="input-coche-nota" placeholder="Nota de lugar (ej: Plaza 42, Calle Real)..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm">
+        <input type="text" id="input-coche-nota" placeholder="Nota de lugar (ej: Plaza 42)..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm">
         <div class="flex gap-2">
           <button onclick="guardarAparcamiento()" class="btn-action bg-rose-600 flex-1 py-2 rounded-xl text-sm font-semibold">Guardar Ubicación</button>
           <a id="link-gmaps" href="#" target="_blank" class="hidden bg-slate-700 px-4 py-2 rounded-xl text-sm flex items-center justify-center">Ver Mapa 📍</a>
@@ -139,7 +121,6 @@
 
   </main>
 
-  <!-- NAVEGACIÓN INFERIOR -->
   <nav class="fixed bottom-0 inset-x-0 bg-slate-900/90 border-t border-slate-800 backdrop-blur flex justify-around p-3 z-50 text-xs text-slate-400">
     <button onclick="mostrarSeccion('compra')" class="flex flex-col items-center gap-1 hover:text-white"><span>🛒</span>Compra</button>
     <button onclick="mostrarSeccion('gastos')" class="flex flex-col items-center gap-1 hover:text-white"><span>👛</span>Gastos</button>
@@ -147,111 +128,136 @@
     <button onclick="mostrarSeccion('coche')" class="flex flex-col items-center gap-1 hover:text-white"><span>🚗</span>Coche</button>
   </nav>
 
-  <!-- SCRIPT DE CONFIGURACIÓN Y SINCRONIZACIÓN FIREBASE -->
   <script>
-    // Configuración Realtime Database de Firebase
-    const firebaseConfig = {
-      databaseURL: "https://hogartotal-app-default-rtdb.europe-west1.firebasedatabase.app/"
-    };
+    // Cargar datos al iniciar
+    document.addEventListener("DOMContentLoaded", () => {
+      renderCompra();
+      renderGastos();
+      renderAgenda();
+      renderCoche();
+    });
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+    // --- COMPRA ---
+    function obtenerCompra() { return JSON.parse(localStorage.getItem('hogar_compra') || '[]'); }
+    function guardarCompra(data) { localStorage.setItem('hogar_compra', JSON.stringify(data)); renderCompra(); }
 
-    // Sincronización Lista Compra
-    db.ref('compra').on('value', snapshot => {
-      const data = snapshot.val() || {};
+    function renderCompra() {
+      const data = obtenerCompra();
       const lista = document.getElementById('lista-compra');
       lista.innerHTML = '';
-      let count = 0;
-      Object.keys(data).forEach(id => {
-        count++;
-        const item = data[id];
+      data.forEach((item, index) => {
         lista.innerHTML += `
           <li class="flex justify-between items-center p-2.5 bg-slate-900/60 rounded-xl border border-slate-800">
             <span>${item.nombre}</span>
-            <button onclick="eliminarItem('compra/${id}')" class="text-xs text-rose-400 hover:underline">Comprado</button>
+            <button onclick="eliminarCompra(${index})" class="text-xs text-rose-400 hover:underline">Comprado</button>
           </li>`;
       });
-      document.getElementById('badge-compra').innerText = count;
-    });
+      document.getElementById('badge-compra').innerText = data.length;
+    }
 
     function agregarCompra() {
       const inp = document.getElementById('input-compra');
       if (inp.value.trim() !== "") {
-        db.ref('compra').push({ nombre: inp.value.trim() });
+        const data = obtenerCompra();
+        data.push({ nombre: inp.value.trim() });
+        guardarCompra(data);
         inp.value = "";
       }
     }
 
-    // Sincronización Gastos
-    db.ref('gastos').on('value', snapshot => {
-      const data = snapshot.val() || {};
+    function eliminarCompra(index) {
+      const data = obtenerCompra();
+      data.splice(index, 1);
+      guardarCompra(data);
+    }
+
+    // --- GASTOS ---
+    function obtenerGastos() { return JSON.parse(localStorage.getItem('hogar_gastos') || '[]'); }
+    function guardarGastos(data) { localStorage.setItem('hogar_gastos', JSON.stringify(data)); renderGastos(); }
+
+    function renderGastos() {
+      const data = obtenerGastos();
       const lista = document.getElementById('lista-gastos');
       lista.innerHTML = '';
       let total = 0;
-      Object.keys(data).forEach(id => {
-        const item = data[id];
+      data.forEach((item, index) => {
         total += parseFloat(item.importe || 0);
         lista.innerHTML += `
           <li class="flex justify-between items-center p-2.5 bg-slate-900/60 rounded-xl border border-slate-800">
             <span>${item.concepto}</span>
             <div class="flex items-center gap-2">
               <span class="font-semibold text-indigo-300">${parseFloat(item.importe).toFixed(2)}€</span>
-              <button onclick="eliminarItem('gastos/${id}')" class="text-xs text-rose-400">✕</button>
+              <button onclick="eliminarGasto(${index})" class="text-xs text-rose-400">✕</button>
             </div>
           </li>`;
       });
       document.getElementById('badge-gastos').innerText = total.toFixed(2) + '€';
-    });
+    }
 
     function agregarGasto() {
       const c = document.getElementById('input-gasto-concepto');
       const i = document.getElementById('input-gasto-importe');
       if (c.value.trim() && i.value) {
-        db.ref('gastos').push({ concepto: c.value.trim(), importe: i.value });
+        const data = obtenerGastos();
+        data.push({ concepto: c.value.trim(), importe: i.value });
+        guardarGastos(data);
         c.value = ""; i.value = "";
       }
     }
 
-    // Sincronización Agenda
-    db.ref('agenda').on('value', snapshot => {
-      const data = snapshot.val() || {};
+    function eliminarGasto(index) {
+      const data = obtenerGastos();
+      data.splice(index, 1);
+      guardarGastos(data);
+    }
+
+    // --- AGENDA ---
+    function obtenerAgenda() { return JSON.parse(localStorage.getItem('hogar_agenda') || '[]'); }
+    function guardarAgenda(data) { localStorage.setItem('hogar_agenda', JSON.stringify(data)); renderAgenda(); }
+
+    function renderAgenda() {
+      const data = obtenerAgenda();
       const lista = document.getElementById('lista-agenda');
       lista.innerHTML = '';
-      let count = 0;
-      Object.keys(data).forEach(id => {
-        count++;
-        const item = data[id];
+      data.forEach((item, index) => {
         lista.innerHTML += `
           <li class="flex justify-between items-center p-2.5 bg-slate-900/60 rounded-xl border border-slate-800">
             <div>
               <p class="font-semibold">${item.titulo}</p>
               <p class="text-xs text-amber-400">${item.fecha}</p>
             </div>
-            <button onclick="eliminarItem('agenda/${id}')" class="text-xs text-rose-400">✕</button>
+            <button onclick="eliminarAgenda(${index})" class="text-xs text-rose-400">✕</button>
           </li>`;
       });
-      document.getElementById('badge-agenda').innerText = count;
-    });
+      document.getElementById('badge-agenda').innerText = data.length;
+    }
 
     function agregarEvento() {
       const t = document.getElementById('input-evento-titulo');
       const f = document.getElementById('input-evento-fecha');
       if (t.value.trim() && f.value) {
-        db.ref('agenda').push({ titulo: t.value.trim(), fecha: f.value });
+        const data = obtenerAgenda();
+        data.push({ titulo: t.value.trim(), fecha: f.value });
+        guardarAgenda(data);
         t.value = ""; f.value = "";
       }
     }
 
-    // Sincronización Coche
-    db.ref('coche').on('value', snapshot => {
-      const item = snapshot.val();
+    function eliminarAgenda(index) {
+      const data = obtenerAgenda();
+      data.splice(index, 1);
+      guardarAgenda(data);
+    }
+
+    // --- COCHE ---
+    function renderCoche() {
+      const item = JSON.parse(localStorage.getItem('hogar_coche') || 'null');
       const info = document.getElementById('coche-info');
       const link = document.getElementById('link-gmaps');
       if (item) {
         info.innerHTML = `
-          <p class="text-emerald-400 font-semibold">📍 Guardado por: ${item.fecha || 'Recientemente'}</p>
-          <p class="text-slate-200">${item.nota || 'Sin notas adicionales'}</p>`;
+          <p class="text-emerald-400 font-semibold">📍 Guardado: ${item.fecha || ''}</p>
+          <p class="text-slate-200">${item.nota || 'Sin notas'}</p>`;
         if(item.lat && item.lng) {
           link.href = `https://www.google.com/maps?q=${item.lat},${item.lng}`;
           link.classList.remove('hidden');
@@ -260,7 +266,7 @@
         info.innerHTML = `<p class="text-slate-400">Sin posición guardada.</p>`;
         link.classList.add('hidden');
       }
-    });
+    }
 
     function guardarAparcamiento() {
       const nota = document.getElementById('input-coche-nota').value;
@@ -268,26 +274,22 @@
 
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(pos => {
-          db.ref('coche').set({
-            lat: pos.coords.latitude,
-            lng: pos.coords.longitude,
-            nota: nota,
-            fecha: fecha
-          });
+          const cocheData = { lat: pos.coords.latitude, lng: pos.coords.longitude, nota, fecha };
+          localStorage.setItem('hogar_coche', JSON.stringify(cocheData));
+          renderCoche();
         }, () => {
-          db.ref('coche').set({ nota: nota, fecha: fecha });
+          const cocheData = { nota, fecha };
+          localStorage.setItem('hogar_coche', JSON.stringify(cocheData));
+          renderCoche();
         });
       } else {
-        db.ref('coche').set({ nota: nota, fecha: fecha });
+        const cocheData = { nota, fecha };
+        localStorage.setItem('hogar_coche', JSON.stringify(cocheData));
+        renderCoche();
       }
     }
 
-    // Función auxiliar para borrar items
-    function eliminarItem(ruta) {
-      db.ref(ruta).remove();
-    }
-
-    // Navegación entre vistas
+    // --- NAVEGACIÓN ---
     function mostrarSeccion(seccion) {
       ['compra', 'gastos', 'agenda', 'coche'].forEach(s => {
         document.getElementById('mod-' + s).classList.add('hidden');
