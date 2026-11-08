@@ -3,299 +3,122 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HogarTotal - Espacio de Pareja</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0f172a">
+  <title>HogarTotal</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body { background-color: #0b0f19; color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
-    .card-dark { background: #161e2e; border: 1px solid #243046; }
-    .btn-action { background: #2563eb; transition: all 0.2s; }
-    .btn-action:active { transform: scale(0.96); }
-  </style>
 </head>
-<body class="pb-24">
+<body class="bg-slate-950 text-slate-100 min-h-screen p-4 pb-20">
+  <div class="max-w-md mx-auto space-y-4">
+    <header class="flex justify-between items-center bg-slate-900 p-4 rounded-2xl border border-slate-800">
+      <h1 class="font-bold text-lg text-emerald-400">HogarTotal 🏠</h1>
+      <span class="text-xs bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded-full">Local OK</span>
+    </header>
 
-  <header class="p-4 flex justify-between items-center border-b border-slate-800 bg-slate-900/50 sticky top-0 backdrop-blur z-50">
-    <div class="flex items-center space-x-3">
-      <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center font-bold text-lg text-white">HT</div>
-      <div>
-        <h1 class="font-bold text-lg leading-tight">HogarTotal</h1>
-        <p class="text-xs text-slate-400">ESPACIO DE PAREJA</p>
-      </div>
-    </div>
-    <div class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse" title="Activo"></div>
-  </header>
-
-  <main class="p-4 max-w-lg mx-auto space-y-6">
-
-    <div class="rounded-2xl p-5 bg-gradient-to-r from-indigo-900 to-purple-900 border border-indigo-700/50 shadow-lg">
-      <span class="text-xs font-semibold px-2.5 py-1 bg-indigo-500/30 text-indigo-200 rounded-full">Panel Personal ⚡</span>
-      <h2 class="text-2xl font-bold mt-2">¡Hola de nuevo!</h2>
-      <p class="text-sm text-indigo-200 mt-1">Todo listo en vuestro hogar.</p>
+    <!-- Navegación de Pestañas -->
+    <div class="grid grid-cols-2 gap-2">
+      <button onclick="cambiarTab('compra')" id="btn-tab-compra" class="p-3 bg-slate-800 rounded-xl font-semibold text-sm border border-emerald-500">🛒 Compra</button>
+      <button onclick="cambiarTab('agenda')" id="btn-tab-agenda" class="p-3 bg-slate-900 rounded-xl font-semibold text-sm border border-slate-800">📅 Agenda</button>
     </div>
 
-    <div class="grid grid-cols-2 gap-3">
-      <button onclick="mostrarSeccion('compra')" class="card-dark p-4 rounded-2xl text-left hover:border-emerald-500 transition">
-        <div class="flex justify-between items-start mb-2">
-          <span class="text-2xl">🛒</span>
-          <span id="badge-compra" class="text-xs font-bold px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded-full">0</span>
-        </div>
-        <h3 class="font-bold text-base">Compra</h3>
-        <p class="text-xs text-slate-400">Pendientes</p>
-      </button>
-
-      <button onclick="mostrarSeccion('gastos')" class="card-dark p-4 rounded-2xl text-left hover:border-indigo-500 transition">
-        <div class="flex justify-between items-start mb-2">
-          <span class="text-2xl">👛</span>
-          <span id="badge-gastos" class="text-xs font-bold px-2 py-0.5 bg-indigo-500/20 text-indigo-400 rounded-full">0.00€</span>
-        </div>
-        <h3 class="font-bold text-base">Gastos Mes</h3>
-        <p class="text-xs text-slate-400">Total registrado</p>
-      </button>
-
-      <button onclick="mostrarSeccion('agenda')" class="card-dark p-4 rounded-2xl text-left hover:border-amber-500 transition">
-        <div class="flex justify-between items-start mb-2">
-          <span class="text-2xl">📅</span>
-          <span id="badge-agenda" class="text-xs font-bold px-2 py-0.5 bg-amber-500/20 text-amber-400 rounded-full">0</span>
-        </div>
-        <h3 class="font-bold text-base">Agenda</h3>
-        <p class="text-xs text-slate-400">Próximos eventos</p>
-      </button>
-
-      <button onclick="mostrarSeccion('coche')" class="card-dark p-4 rounded-2xl text-left hover:border-rose-500 transition">
-        <div class="flex justify-between items-start mb-2">
-          <span class="text-2xl">🚗</span>
-          <span id="badge-coche" class="text-xs font-bold px-2 py-0.5 bg-rose-500/20 text-rose-400 rounded-full">Ubicación</span>
-        </div>
-        <h3 class="font-bold text-base">Coche</h3>
-        <p class="text-xs text-slate-400">Aparcamiento</p>
-      </button>
+    <!-- MÓDULO COMPRA -->
+    <div id="tab-compra" class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3">
+      <h2 class="font-bold text-base">Lista de la Compra</h2>
+      <div class="flex gap-2">
+        <input type="text" id="inp-compra" placeholder="Añadir producto..." class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+        <button onclick="addCompra()" class="bg-emerald-600 px-4 py-2 rounded-xl text-sm font-semibold active:scale-95">Añadir</button>
+      </div>
+      <ul id="ul-compra" class="space-y-2 text-sm pt-2"></ul>
     </div>
 
-    <div id="panel-detalle" class="card-dark rounded-2xl p-4 space-y-4">
-      
-      <div id="mod-compra" class="space-y-4">
-        <h3 class="font-bold text-lg text-emerald-400 flex items-center gap-2">🛒 Lista de la Compra</h3>
-        <div class="flex gap-2">
-          <input type="text" id="input-compra" placeholder="Añadir producto..." class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-emerald-500">
-          <button onclick="agregarCompra()" class="btn-action bg-emerald-600 px-4 py-2 rounded-xl text-sm font-semibold">Añadir</button>
-        </div>
-        <ul id="lista-compra" class="space-y-2 text-sm"></ul>
-      </div>
-
-      <div id="mod-gastos" class="space-y-4 hidden">
-        <h3 class="font-bold text-lg text-indigo-400 flex items-center gap-2">👛 Registro de Gastos</h3>
-        <div class="grid grid-cols-2 gap-2">
-          <input type="text" id="input-gasto-concepto" placeholder="Concepto..." class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm">
-          <input type="number" id="input-gasto-importe" placeholder="Importe (€)" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm">
-        </div>
-        <button onclick="agregarGasto()" class="btn-action bg-indigo-600 w-full py-2 rounded-xl text-sm font-semibold">Guardar Gasto</button>
-        <ul id="lista-gastos" class="space-y-2 text-sm"></ul>
-      </div>
-
-      <div id="mod-agenda" class="space-y-4 hidden">
-        <h3 class="font-bold text-lg text-amber-400 flex items-center gap-2">📅 Agenda Compartida</h3>
-        <div class="space-y-2">
-          <input type="text" id="input-evento-titulo" placeholder="Título del evento..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm">
-          <input type="date" id="input-evento-fecha" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-300">
-          <button onclick="agregarEvento()" class="btn-action bg-amber-600 w-full py-2 rounded-xl text-sm font-semibold">Guardar Fecha</button>
-        </div>
-        <ul id="lista-agenda" class="space-y-2 text-sm"></ul>
-      </div>
-
-      <div id="mod-coche" class="space-y-4 hidden">
-        <h3 class="font-bold text-lg text-rose-400 flex items-center gap-2">🚗 Aparcamiento del Coche</h3>
-        <p class="text-xs text-slate-400">Guarda la ubicación actual para encontrarlo más tarde.</p>
-        <input type="text" id="input-coche-nota" placeholder="Nota de lugar (ej: Plaza 42)..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm">
-        <div class="flex gap-2">
-          <button onclick="guardarAparcamiento()" class="btn-action bg-rose-600 flex-1 py-2 rounded-xl text-sm font-semibold">Guardar Ubicación</button>
-          <a id="link-gmaps" href="#" target="_blank" class="hidden bg-slate-700 px-4 py-2 rounded-xl text-sm flex items-center justify-center">Ver Mapa 📍</a>
-        </div>
-        <div id="coche-info" class="p-3 bg-slate-900 rounded-xl text-xs space-y-1">
-          <p class="text-slate-400">Sin posición guardada.</p>
-        </div>
-      </div>
-
+    <!-- MÓDULO AGENDA -->
+    <div id="tab-agenda" class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3 hidden">
+      <h2 class="font-bold text-base">Agenda Compartida</h2>
+      <input type="text" id="inp-evento" placeholder="Título del evento..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
+      <input type="date" id="inp-fecha" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-300">
+      <button onclick="addAgenda()" class="w-full bg-amber-600 py-2 rounded-xl text-sm font-semibold active:scale-95">Guardar Evento</button>
+      <ul id="ul-agenda" class="space-y-2 text-sm pt-2"></ul>
     </div>
-
-  </main>
-
-  <nav class="fixed bottom-0 inset-x-0 bg-slate-900/90 border-t border-slate-800 backdrop-blur flex justify-around p-3 z-50 text-xs text-slate-400">
-    <button onclick="mostrarSeccion('compra')" class="flex flex-col items-center gap-1 hover:text-white"><span>🛒</span>Compra</button>
-    <button onclick="mostrarSeccion('gastos')" class="flex flex-col items-center gap-1 hover:text-white"><span>👛</span>Gastos</button>
-    <button onclick="mostrarSeccion('agenda')" class="flex flex-col items-center gap-1 hover:text-white"><span>📅</span>Agenda</button>
-    <button onclick="mostrarSeccion('coche')" class="flex flex-col items-center gap-1 hover:text-white"><span>🚗</span>Coche</button>
-  </nav>
+  </div>
 
   <script>
+    // Al cargar la página leemos lo que hay guardado
     document.addEventListener("DOMContentLoaded", () => {
-      renderCompra();
-      renderGastos();
-      renderAgenda();
-      renderCoche();
+      cargarCompra();
+      cargarAgenda();
     });
 
-    function obtenerCompra() { return JSON.parse(localStorage.getItem('hogar_compra') || '[]'); }
-    function guardarCompra(data) { localStorage.setItem('hogar_compra', JSON.stringify(data)); renderCompra(); }
-
-    function renderCompra() {
-      const data = obtenerCompra();
-      const lista = document.getElementById('lista-compra');
-      if (!lista) return;
-      lista.innerHTML = '';
-      data.forEach((item, index) => {
-        lista.innerHTML += `
-          <li class="flex justify-between items-center p-2.5 bg-slate-900/60 rounded-xl border border-slate-800">
-            <span>${item.nombre}</span>
-            <button onclick="eliminarCompra(${index})" class="text-xs text-rose-400 hover:underline">Comprado</button>
-          </li>`;
-      });
-      document.getElementById('badge-compra').innerText = data.length;
-    }
-
-    function agregarCompra() {
-      const inp = document.getElementById('input-compra');
-      if (inp && inp.value.trim() !== "") {
-        const data = obtenerCompra();
-        data.push({ nombre: inp.value.trim() });
-        guardarCompra(data);
-        inp.value = "";
-      }
-    }
-
-    function eliminarCompra(index) {
-      const data = obtenerCompra();
-      data.splice(index, 1);
-      guardarCompra(data);
-    }
-
-    function obtenerGastos() { return JSON.parse(localStorage.getItem('hogar_gastos') || '[]'); }
-    function guardarGastos(data) { localStorage.setItem('hogar_gastos', JSON.stringify(data)); renderGastos(); }
-
-    function renderGastos() {
-      const data = obtenerGastos();
-      const lista = document.getElementById('lista-gastos');
-      if (!lista) return;
-      lista.innerHTML = '';
-      let total = 0;
-      data.forEach((item, index) => {
-        total += parseFloat(item.importe || 0);
-        lista.innerHTML += `
-          <li class="flex justify-between items-center p-2.5 bg-slate-900/60 rounded-xl border border-slate-800">
-            <span>${item.concepto}</span>
-            <div class="flex items-center gap-2">
-              <span class="font-semibold text-indigo-300">${parseFloat(item.importe).toFixed(2)}€</span>
-              <button onclick="eliminarGasto(${index})" class="text-xs text-rose-400">✕</button>
-            </div>
-          </li>`;
-      });
-      document.getElementById('badge-gastos').innerText = total.toFixed(2) + '€';
-    }
-
-    function agregarGasto() {
-      const c = document.getElementById('input-gasto-concepto');
-      const i = document.getElementById('input-gasto-importe');
-      if (c && i && c.value.trim() && i.value) {
-        const data = obtenerGastos();
-        data.push({ concepto: c.value.trim(), importe: i.value });
-        guardarGastos(data);
-        c.value = ""; i.value = "";
-      }
-    }
-
-    function eliminarGasto(index) {
-      const data = obtenerGastos();
-      data.splice(index, 1);
-      guardarGastos(data);
-    }
-
-    function obtenerAgenda() { return JSON.parse(localStorage.getItem('hogar_agenda') || '[]'); }
-    function guardarAgenda(data) { localStorage.setItem('hogar_agenda', JSON.stringify(data)); renderAgenda(); }
-
-    function renderAgenda() {
-      const data = obtenerAgenda();
-      const lista = document.getElementById('lista-agenda');
-      if (!lista) return;
-      lista.innerHTML = '';
-      data.forEach((item, index) => {
-        lista.innerHTML += `
-          <li class="flex justify-between items-center p-2.5 bg-slate-900/60 rounded-xl border border-slate-800">
-            <div>
-              <p class="font-semibold">${item.titulo}</p>
-              <p class="text-xs text-amber-400">${item.fecha}</p>
-            </div>
-            <button onclick="eliminarAgenda(${index})" class="text-xs text-rose-400">✕</button>
-          </li>`;
-      });
-      document.getElementById('badge-agenda').innerText = data.length;
-    }
-
-    function agregarEvento() {
-      const t = document.getElementById('input-evento-titulo');
-      const f = document.getElementById('input-evento-fecha');
-      if (t && f && t.value.trim() && f.value) {
-        const data = obtenerAgenda();
-        data.push({ titulo: t.value.trim(), fecha: f.value });
-        guardarAgenda(data);
-        t.value = ""; f.value = "";
-      }
-    }
-
-    function eliminarAgenda(index) {
-      const data = obtenerAgenda();
-      data.splice(index, 1);
-      guardarAgenda(data);
-    }
-
-    function renderCoche() {
-      const item = JSON.parse(localStorage.getItem('hogar_coche') || 'null');
-      const info = document.getElementById('coche-info');
-      const link = document.getElementById('link-gmaps');
-      if (!info) return;
-      if (item) {
-        info.innerHTML = `
-          <p class="text-emerald-400 font-semibold">📍 Guardado: ${item.fecha || ''}</p>
-          <p class="text-slate-200">${item.nota || 'Sin notas'}</p>`;
-        if(item.lat && item.lng && link) {
-          link.href = `https://www.google.com/maps?q=${item.lat},${item.lng}`;
-          link.classList.remove('hidden');
-        }
+    function cambiarTab(tab) {
+      if(tab === 'compra') {
+        document.getElementById('tab-compra').classList.remove('hidden');
+        document.getElementById('tab-agenda').classList.add('hidden');
+        document.getElementById('btn-tab-compra').className = "p-3 bg-slate-800 rounded-xl font-semibold text-sm border border-emerald-500";
+        document.getElementById('btn-tab-agenda').className = "p-3 bg-slate-900 rounded-xl font-semibold text-sm border border-slate-800";
       } else {
-        info.innerHTML = `<p class="text-slate-400">Sin posición guardada.</p>`;
-        if(link) link.classList.add('hidden');
+        document.getElementById('tab-agenda').classList.remove('hidden');
+        document.getElementById('tab-compra').classList.add('hidden');
+        document.getElementById('btn-tab-agenda').className = "p-3 bg-slate-800 rounded-xl font-semibold text-sm border border-amber-500";
+        document.getElementById('btn-tab-compra').className = "p-3 bg-slate-900 rounded-xl font-semibold text-sm border border-slate-800";
       }
     }
 
-    function guardarAparcamiento() {
-      const notaInput = document.getElementById('input-coche-nota');
-      const nota = notaInput ? notaInput.value : '';
-      const fecha = new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' });
-
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(pos => {
-          const cocheData = { lat: pos.coords.latitude, lng: pos.coords.longitude, nota, fecha };
-          localStorage.setItem('hogar_coche', JSON.stringify(cocheData));
-          renderCoche();
-        }, () => {
-          const cocheData = { nota, fecha };
-          localStorage.setItem('hogar_coche', JSON.stringify(cocheData));
-          renderCoche();
-        });
-      } else {
-        const cocheData = { nota, fecha };
-        localStorage.setItem('hogar_coche', JSON.stringify(cocheData));
-        renderCoche();
-      }
-    }
-
-    function mostrarSeccion(seccion) {
-      ['compra', 'gastos', 'agenda', 'coche'].forEach(s => {
-        const el = document.getElementById('mod-' + s);
-        if(el) el.classList.add('hidden');
+    // --- COMPRA ---
+    function cargarCompra() {
+      const lista = JSON.parse(localStorage.getItem('ht_compra') || '[]');
+      const ul = document.getElementById('ul-compra');
+      ul.innerHTML = '';
+      lista.forEach((item, index) => {
+        ul.innerHTML += `<li class="flex justify-between items-center bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+          <span>${item}</span>
+          <button onclick="delCompra(${index})" class="text-rose-400 text-xs">Borrar</button>
+        </li>`;
       });
-      const target = document.getElementById('mod-' + seccion);
-      if(target) target.classList.remove('hidden');
+    }
+
+    function addCompra() {
+      const inp = document.getElementById('inp-compra');
+      if(!inp.value.trim()) return;
+      const lista = JSON.parse(localStorage.getItem('ht_compra') || '[]');
+      lista.push(inp.value.trim());
+      localStorage.setItem('ht_compra', JSON.stringify(lista));
+      inp.value = '';
+      cargarCompra();
+    }
+
+    function delCompra(index) {
+      const lista = JSON.parse(localStorage.getItem('ht_compra') || '[]');
+      lista.splice(index, 1);
+      localStorage.setItem('ht_compra', JSON.stringify(lista));
+      cargarCompra();
+    }
+
+    // --- AGENDA ---
+    function cargarAgenda() {
+      const lista = JSON.parse(localStorage.getItem('ht_agenda') || '[]');
+      const ul = document.getElementById('ul-agenda');
+      ul.innerHTML = '';
+      lista.forEach((item, index) => {
+        ul.innerHTML += `<li class="flex justify-between items-center bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+          <div><p class="font-semibold">${item.titulo}</p><p class="text-xs text-amber-400">${item.fecha}</p></div>
+          <button onclick="delAgenda(${index})" class="text-rose-400 text-xs">Borrar</button>
+        </li>`;
+      });
+    }
+
+    function addAgenda() {
+      const t = document.getElementById('inp-evento');
+      const f = document.getElementById('inp-fecha');
+      if(!t.value.trim() || !f.value) return;
+      const lista = JSON.parse(localStorage.getItem('ht_agenda') || '[]');
+      lista.push({ titulo: t.value.trim(), fecha: f.value });
+      localStorage.setItem('ht_agenda', JSON.stringify(lista));
+      t.value = ''; f.value = '';
+      cargarAgenda();
+    }
+
+    function delAgenda(index) {
+      const lista = JSON.parse(localStorage.getItem('ht_agenda') || '[]');
+      lista.splice(index, 1);
+      localStorage.setItem('ht_agenda', JSON.stringify(lista));
+      cargarAgenda();
     }
   </script>
 </body>
