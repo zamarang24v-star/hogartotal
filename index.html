@@ -129,7 +129,6 @@
   </nav>
 
   <script>
-    // Cargar datos al iniciar
     document.addEventListener("DOMContentLoaded", () => {
       renderCompra();
       renderGastos();
@@ -137,13 +136,13 @@
       renderCoche();
     });
 
-    // --- COMPRA ---
     function obtenerCompra() { return JSON.parse(localStorage.getItem('hogar_compra') || '[]'); }
     function guardarCompra(data) { localStorage.setItem('hogar_compra', JSON.stringify(data)); renderCompra(); }
 
     function renderCompra() {
       const data = obtenerCompra();
       const lista = document.getElementById('lista-compra');
+      if (!lista) return;
       lista.innerHTML = '';
       data.forEach((item, index) => {
         lista.innerHTML += `
@@ -157,7 +156,7 @@
 
     function agregarCompra() {
       const inp = document.getElementById('input-compra');
-      if (inp.value.trim() !== "") {
+      if (inp && inp.value.trim() !== "") {
         const data = obtenerCompra();
         data.push({ nombre: inp.value.trim() });
         guardarCompra(data);
@@ -171,13 +170,13 @@
       guardarCompra(data);
     }
 
-    // --- GASTOS ---
     function obtenerGastos() { return JSON.parse(localStorage.getItem('hogar_gastos') || '[]'); }
     function guardarGastos(data) { localStorage.setItem('hogar_gastos', JSON.stringify(data)); renderGastos(); }
 
     function renderGastos() {
       const data = obtenerGastos();
       const lista = document.getElementById('lista-gastos');
+      if (!lista) return;
       lista.innerHTML = '';
       let total = 0;
       data.forEach((item, index) => {
@@ -197,7 +196,7 @@
     function agregarGasto() {
       const c = document.getElementById('input-gasto-concepto');
       const i = document.getElementById('input-gasto-importe');
-      if (c.value.trim() && i.value) {
+      if (c && i && c.value.trim() && i.value) {
         const data = obtenerGastos();
         data.push({ concepto: c.value.trim(), importe: i.value });
         guardarGastos(data);
@@ -211,13 +210,13 @@
       guardarGastos(data);
     }
 
-    // --- AGENDA ---
     function obtenerAgenda() { return JSON.parse(localStorage.getItem('hogar_agenda') || '[]'); }
     function guardarAgenda(data) { localStorage.setItem('hogar_agenda', JSON.stringify(data)); renderAgenda(); }
 
     function renderAgenda() {
       const data = obtenerAgenda();
       const lista = document.getElementById('lista-agenda');
+      if (!lista) return;
       lista.innerHTML = '';
       data.forEach((item, index) => {
         lista.innerHTML += `
@@ -235,7 +234,7 @@
     function agregarEvento() {
       const t = document.getElementById('input-evento-titulo');
       const f = document.getElementById('input-evento-fecha');
-      if (t.value.trim() && f.value) {
+      if (t && f && t.value.trim() && f.value) {
         const data = obtenerAgenda();
         data.push({ titulo: t.value.trim(), fecha: f.value });
         guardarAgenda(data);
@@ -249,27 +248,28 @@
       guardarAgenda(data);
     }
 
-    // --- COCHE ---
     function renderCoche() {
       const item = JSON.parse(localStorage.getItem('hogar_coche') || 'null');
       const info = document.getElementById('coche-info');
       const link = document.getElementById('link-gmaps');
+      if (!info) return;
       if (item) {
         info.innerHTML = `
           <p class="text-emerald-400 font-semibold">📍 Guardado: ${item.fecha || ''}</p>
           <p class="text-slate-200">${item.nota || 'Sin notas'}</p>`;
-        if(item.lat && item.lng) {
+        if(item.lat && item.lng && link) {
           link.href = `https://www.google.com/maps?q=${item.lat},${item.lng}`;
           link.classList.remove('hidden');
         }
       } else {
         info.innerHTML = `<p class="text-slate-400">Sin posición guardada.</p>`;
-        link.classList.add('hidden');
+        if(link) link.classList.add('hidden');
       }
     }
 
     function guardarAparcamiento() {
-      const nota = document.getElementById('input-coche-nota').value;
+      const notaInput = document.getElementById('input-coche-nota');
+      const nota = notaInput ? notaInput.value : '';
       const fecha = new Date().toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' });
 
       if (navigator.geolocation) {
@@ -289,12 +289,13 @@
       }
     }
 
-    // --- NAVEGACIÓN ---
     function mostrarSeccion(seccion) {
       ['compra', 'gastos', 'agenda', 'coche'].forEach(s => {
-        document.getElementById('mod-' + s).classList.add('hidden');
+        const el = document.getElementById('mod-' + s);
+        if(el) el.classList.add('hidden');
       });
-      document.getElementById('mod-' + seccion).classList.remove('hidden');
+      const target = document.getElementById('mod-' + seccion);
+      if(target) target.classList.remove('hidden');
     }
   </script>
 </body>
