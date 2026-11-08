@@ -1,715 +1,181 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HogarTotal - Organización de Casa</title>
-    
-    <!-- Web App Capabilities & Mobile Meta -->
-    <meta name="theme-color" content="#1e293b">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="description" content="Aplicación de organización compartida para el hogar y la pareja">
-
-    <!-- Web App Manifest (Data Dynamic URL Generator below or standard JSON) -->
-    <link rel="manifest" id="manifest-placeholder">
-
-    <!-- Font & Icons -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            50: '#f0fdf4',
-                            100: '#dcfce7',
-                            500: '#22c55e',
-                            600: '#16a34a',
-                            700: '#15803d',
-                        },
-                        darkBg: '#0f172a',
-                        cardBg: '#1e293b',
-                        accent: '#6366f1'
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        /* Touch Friendly Custom Enhancements */
-        body {
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
-            -webkit-user-select: none;
-            touch-action: manipulation;
-        }
-        .pb-safe {
-            padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
-        }
-        .hide-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .hide-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        .animate-fade-in {
-            animation: fadeIn 0.2s ease-in-out forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101827">
+<meta name="description" content="HogarTotal 2.0: organización del hogar, agenda, gastos, medicamentos y meteorología.">
+<title>HogarTotal 2.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root{--bg:#0b1220;--panel:#151f30;--panel2:#1b2940;--line:#29384e;--text:#edf3fc;--muted:#9aabc2;--green:#31c48d;--blue:#748cff;--amber:#f4b84b;--red:#fb7185;--cyan:#54c7ec;--radius:20px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#172642 0,#0b1220 48%);color:var(--text);font-family:"Plus Jakarta Sans",system-ui,sans-serif;min-height:100vh;padding-bottom:95px;-webkit-tap-highlight-color:transparent}
+button,input,select,textarea{font:inherit}button{cursor:pointer}header{position:sticky;top:0;z-index:10;background:#0d1727eF;backdrop-filter:blur(16px);border-bottom:1px solid #29384e;padding:13px 17px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:11px}.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,#27bd89,#6677ed);display:grid;place-items:center;box-shadow:0 8px 24px #31c48d25}.brand h1{font-size:17px;margin:0;font-weight:800;letter-spacing:-.5px}.brand small{color:var(--muted);font-size:9px;letter-spacing:1.4px;text-transform:uppercase}
+.wrap{max-width:760px;margin:auto;padding:19px 16px 25px}.tab{display:none;animation:appear .2s ease}.tab.active{display:block}@keyframes appear{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.hero{padding:22px;border-radius:25px;background:linear-gradient(125deg,#4759c9,#273b70 60%,#15243c);position:relative;overflow:hidden;margin-bottom:17px;box-shadow:0 15px 40px #0003}.hero:after{content:"";position:absolute;width:180px;height:180px;border:1px solid #ffffff20;border-radius:50%;right:-55px;top:-65px;box-shadow:0 0 0 25px #ffffff08,0 0 0 50px #ffffff05}.hero>*{position:relative;z-index:1}.eyebrow{font-size:10px;letter-spacing:1.3px;text-transform:uppercase;color:#d6ddff;font-weight:700}.hero h2{font-size:24px;margin:8px 0 5px}.hero p{font-size:12px;color:#d4dcff;margin:0;max-width:85%;line-height:1.6}
+.live-datetime{display:inline-flex;flex-direction:column;gap:3px;margin-top:16px;padding:10px 14px;border:1px solid #ffffff28;background:#ffffff12;border-radius:14px;backdrop-filter:blur(8px)}
+.live-datetime #homeClock{font-size:25px;line-height:1.1;font-weight:800;letter-spacing:1.5px;font-variant-numeric:tabular-nums;color:#fff}
+.live-datetime #homeDate{font-size:10px;font-weight:600;color:#dbe5ff;text-transform:capitalize;letter-spacing:.2px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.card,.panel{background:linear-gradient(145deg,#19263a,#131e2f);border:1px solid var(--line);border-radius:var(--radius);padding:15px;box-shadow:0 8px 25px #0002}.stat{min-height:118px;cursor:pointer;transition:.15s}.stat:active{transform:scale(.98)}.stat-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.ico{width:37px;height:37px;border-radius:13px;display:grid;place-items:center}.ico.green{background:#31c48d1b;color:var(--green)}.ico.blue{background:#748cff1b;color:var(--blue)}.ico.amber{background:#f4b84b1b;color:var(--amber)}.ico.red{background:#fb71851b;color:var(--red)}.ico.cyan{background:#54c7ec1b;color:var(--cyan)}.pill{font-size:10px;padding:5px 8px;border-radius:20px;background:#ffffff10;color:#dbe7f7;font-weight:700}.stat h3{font-size:13px;margin:0 0 3px}.stat p{font-size:10px;color:var(--muted);margin:0}.section-title{font-size:11px;color:var(--muted);font-weight:800;letter-spacing:1.2px;text-transform:uppercase;margin:23px 2px 11px}
+.quick{display:grid;gap:9px}.quick button,.row{width:100%;border:1px solid var(--line);background:#172438;color:var(--text);border-radius:16px;padding:13px;display:flex;align-items:center;gap:12px;text-align:left}.quick button span{flex:1}.quick strong{display:block;font-size:12px}.quick small{display:block;color:var(--muted);font-size:10px;margin-top:3px}
+.pagehead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:2px 0 15px}.pagehead h2{font-size:19px;margin:0 0 4px}.pagehead p{font-size:11px;color:var(--muted);margin:0}
+.btn{border:0;border-radius:12px;padding:10px 13px;font-size:11px;font-weight:800;color:#07131c;background:var(--green)}.btn.secondary{background:#26364d;color:#e5eef9;border:1px solid #3a4b63}.btn.red{background:#4a2635;color:#ff9eae}.btn.blue{background:#394b9b;color:white}.btn.amber{background:#594522;color:#ffd27a}.btn.small{padding:8px 10px}
+form.panel{display:grid;gap:10px;margin-bottom:14px}.form-title{font-size:10px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;font-weight:800}
+input,select,textarea{width:100%;border:1px solid #314158;background:#0e1929;color:var(--text);border-radius:12px;padding:12px;font-size:12px;outline:none;min-width:0}input:focus,select:focus,textarea:focus{border-color:#7188ff}input::placeholder,textarea::placeholder{color:#74849b}.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.list{display:grid;gap:9px}.item{background:#172438;border:1px solid var(--line);border-radius:15px;padding:12px;display:flex;align-items:center;justify-content:space-between;gap:10px}.item-main{min-width:0;flex:1}.item h4{font-size:12px;margin:0 0 4px;overflow-wrap:anywhere}.item p{font-size:10px;color:var(--muted);margin:0;line-height:1.5;overflow-wrap:anywhere}.actions{display:flex;align-items:center;gap:6px}.iconbtn{border:0;background:#26364d;color:#bdcbe0;border-radius:10px;width:31px;height:31px;display:grid;place-items:center}.check{width:20px;height:20px;accent-color:var(--green)}.done h4{text-decoration:line-through;color:#71819a}.empty{text-align:center;color:var(--muted);font-size:11px;padding:25px 10px;border:1px dashed #34445a;border-radius:15px}
+.weatherbox{background:linear-gradient(135deg,#17436a,#273b70);border:1px solid #49618b;border-radius:20px;padding:18px;margin-bottom:13px}.weatherbig{font-size:34px;font-weight:800}.weathergrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:15px}.weathergrid div{background:#ffffff12;border-radius:12px;padding:9px}.weathergrid small{display:block;color:#c3d5ed;font-size:9px}.weathergrid b{font-size:12px}
+.notice{font-size:10px;color:#aebdd0;line-height:1.6;background:#101b2b;border:1px solid #29384e;padding:11px;border-radius:13px;margin-top:12px}
+nav{position:fixed;z-index:20;bottom:0;left:0;right:0;background:#0d1727f2;backdrop-filter:blur(16px);border-top:1px solid #29384e;padding:8px 5px calc(8px + env(safe-area-inset-bottom));}
+.navinner{max-width:760px;margin:auto;display:flex;justify-content:space-around;gap:2px}.navbtn{border:0;background:transparent;color:#8fa1ba;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 8px;border-radius:12px;min-width:48px}.navbtn span{font-size:9px;font-weight:700}.navbtn.active{color:#55d6a4;background:#31c48d13}
+.toast{position:fixed;z-index:50;bottom:100px;left:50%;transform:translateX(-50%);background:#e7f7ef;color:#123d2d;padding:11px 16px;border-radius:12px;font-size:11px;font-weight:700;box-shadow:0 8px 25px #0005;display:none;max-width:90%;text-align:center}
+@media(min-width:600px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.wrap{padding-top:25px}.hero{padding:28px}.hero h2{font-size:28px}}
+</style>
 </head>
-<body class="bg-darkBg text-slate-100 font-sans antialiased min-h-screen pb-safe">
-
-    <!-- TOP HEADER -->
-    <header class="sticky top-0 z-30 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 py-3.5 flex items-center justify-between">
-        <div class="flex items-center gap-2.5">
-            <div class="bg-gradient-to-tr from-brand-600 to-indigo-500 p-2 rounded-xl shadow-lg shadow-brand-500/10">
-                <i data-lucide="home" class="w-5 h-5 text-white"></i>
-            </div>
-            <div>
-                <h1 class="text-lg font-bold tracking-tight text-white leading-none">HogarTotal</h1>
-                <span class="text-[10px] font-medium text-slate-400 tracking-wide uppercase">Espacio de Pareja</span>
-            </div>
-        </div>
-        <button onclick="switchTab('dashboard')" class="p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white active:scale-95 transition-all">
-            <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-        </button>
-    </header>
-
-    <!-- MAIN CONTAINER WITH TABS -->
-    <main class="max-w-md mx-auto px-4 pt-4">
-
-        <!-- ================= DASHBOARD TAB ================= -->
-        <section id="tab-dashboard" class="tab-content animate-fade-in">
-            <!-- Greeting Card -->
-            <div class="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-indigo-700 to-slate-900 rounded-2xl p-5 mb-5 shadow-xl">
-                <div class="relative z-10">
-                    <span id="greeting-time" class="inline-block px-2.5 py-1 rounded-full bg-white/10 text-xs font-semibold text-indigo-200 mb-2">¡Buenas! 👋</span>
-                    <h2 class="text-xl font-bold text-white mb-1">¡Hola de nuevo!</h2>
-                    <p class="text-xs text-indigo-200/80">Todo listo y sincronizado en vuestro hogar.</p>
-                </div>
-                <i data-lucide="sparkles" class="absolute -right-2 -bottom-2 w-28 h-28 text-white/5 pointer-events-none"></i>
-            </div>
-
-            <!-- Summary Widgets Grid -->
-            <div class="grid grid-cols-2 gap-3.5 mb-5">
-                <div onclick="switchTab('compra')" class="bg-cardBg p-4 rounded-2xl border border-slate-800 shadow-md active:scale-95 transition-all cursor-pointer">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="p-2 rounded-xl bg-emerald-500/10 text-emerald-400">
-                            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
-                        </span>
-                        <span id="dash-compra-count" class="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">0</span>
-                    </div>
-                    <h3 class="text-sm font-semibold text-slate-200">Compra</h3>
-                    <p class="text-[11px] text-slate-400 mt-0.5">Pendientes</p>
-                </div>
-
-                <div onclick="switchTab('gastos')" class="bg-cardBg p-4 rounded-2xl border border-slate-800 shadow-md active:scale-95 transition-all cursor-pointer">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="p-2 rounded-xl bg-indigo-500/10 text-indigo-400">
-                            <i data-lucide="wallet" class="w-5 h-5"></i>
-                        </span>
-                        <span id="dash-gastos-total" class="text-xs font-bold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300">0€</span>
-                    </div>
-                    <h3 class="text-sm font-semibold text-slate-200">Gastos Mes</h3>
-                    <p class="text-[11px] text-slate-400 mt-0.5">Total registrado</p>
-                </div>
-
-                <div onclick="switchTab('eventos')" class="bg-cardBg p-4 rounded-2xl border border-slate-800 shadow-md active:scale-95 transition-all cursor-pointer">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="p-2 rounded-xl bg-amber-500/10 text-amber-400">
-                            <i data-lucide="calendar" class="w-5 h-5"></i>
-                        </span>
-                        <span id="dash-eventos-count" class="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300">0</span>
-                    </div>
-                    <h3 class="text-sm font-semibold text-slate-200">Agenda</h3>
-                    <p class="text-[11px] text-slate-400 mt-0.5">Próximos eventos</p>
-                </div>
-
-                <div onclick="switchTab('parking')" class="bg-cardBg p-4 rounded-2xl border border-slate-800 shadow-md active:scale-95 transition-all cursor-pointer">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="p-2 rounded-xl bg-rose-500/10 text-rose-400">
-                            <i data-lucide="car" class="w-5 h-5"></i>
-                        </span>
-                        <span id="dash-parking-status" class="text-xs font-bold px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300">Ver</span>
-                    </div>
-                    <h3 class="text-sm font-semibold text-slate-200">Coche</h3>
-                    <p class="text-[11px] text-slate-400 mt-0.5">Aparcamiento</p>
-                </div>
-            </div>
-
-            <!-- Fast Modules Shortcuts list -->
-            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 px-1">Acceso Rápido</h3>
-            <div class="space-y-2.5">
-                <button onclick="switchTab('recetas')" class="w-full bg-cardBg border border-slate-800 p-3.5 rounded-2xl flex items-center justify-between active:scale-[0.98] transition-all">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2.5 rounded-xl bg-amber-500/10 text-amber-400">
-                            <i data-lucide="utensils" class="w-5 h-5"></i>
-                        </div>
-                        <div class="text-left">
-                            <div class="text-sm font-semibold text-slate-200">Recetario Familiar</div>
-                            <div class="text-xs text-slate-400">Consulta o añade platos para la semana</div>
-                        </div>
-                    </div>
-                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
-                </button>
-            </div>
-        </section>
-
-        <!-- ================= LISTA DE LA COMPRA ================= -->
-        <section id="tab-compra" class="tab-content hidden animate-fade-in">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <h2 class="text-lg font-bold text-white">Lista de la Compra</h2>
-                    <p class="text-xs text-slate-400">Tacha lo que metáis en el carro</p>
-                </div>
-                <button onclick="limpiarCompraComprados()" class="px-3 py-1.5 bg-rose-500/10 text-rose-400 rounded-xl text-xs font-medium hover:bg-rose-500/20 transition-all">
-                    Limpiar listos
-                </button>
-            </div>
-
-            <!-- Form Add -->
-            <form onsubmit="addCompraItem(event)" class="flex gap-2 mb-4">
-                <input type="text" id="compra-input" placeholder="Ej: Leche, Fruta, Pan..." required class="flex-1 bg-cardBg border border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-all">
-                <button type="submit" class="bg-brand-600 hover:bg-brand-500 text-white p-3 rounded-xl flex items-center justify-center active:scale-95 transition-all">
-                    <i data-lucide="plus" class="w-5 h-5"></i>
-                </button>
-            </form>
-
-            <!-- List -->
-            <div id="compra-list" class="space-y-2">
-                <!-- Items injected JS -->
-            </div>
-        </section>
-
-        <!-- ================= CALENDARIO / AGENDA ================= -->
-        <section id="tab-eventos" class="tab-content hidden animate-fade-in">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <h2 class="text-lg font-bold text-white">Agenda del Hogar</h2>
-                    <p class="text-xs text-slate-400">Citas, pagos y notas importantes</p>
-                </div>
-            </div>
-
-            <!-- Form Add Event -->
-            <form onsubmit="addEvento(event)" class="bg-cardBg border border-slate-800 rounded-2xl p-4 mb-5 space-y-3 shadow-md">
-                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Añadir Recordatorio</h3>
-                <input type="text" id="evento-titulo" placeholder="Título del evento..." required class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-500">
-                <div class="grid grid-cols-2 gap-2">
-                    <input type="date" id="evento-fecha" required class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500">
-                    <input type="time" id="evento-hora" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500">
-                </div>
-                <button type="submit" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-medium py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 transition-all">
-                    <i data-lucide="calendar-plus" class="w-4 h-4"></i> Guardar Evento
-                </button>
-            </form>
-
-            <!-- Event List -->
-            <div id="eventos-list" class="space-y-2.5">
-                <!-- Events injected JS -->
-            </div>
-        </section>
-
-        <!-- ================= RECETARIO ================= -->
-        <section id="tab-recetas" class="tab-content hidden animate-fade-in">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <h2 class="text-lg font-bold text-white">Recetario</h2>
-                    <p class="text-xs text-slate-400">Ideas para comidas y cenas</p>
-                </div>
-                <button onclick="toggleRecetaForm()" class="bg-amber-600/20 text-amber-400 px-3 py-1.5 rounded-xl text-xs font-semibold hover:bg-amber-600/30 transition-all flex items-center gap-1.5">
-                    <i data-lucide="plus" class="w-4 h-4"></i> Nueva
-                </button>
-            </div>
-
-            <!-- Modal/Form Hidden -->
-            <form id="receta-form" onsubmit="addReceta(event)" class="hidden bg-cardBg border border-slate-800 rounded-2xl p-4 mb-5 space-y-3">
-                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Nueva Receta</h3>
-                <input type="text" id="receta-nombre" placeholder="Nombre (Ej: Paella, Lasaña...)" required class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none">
-                <textarea id="receta-ingredientes" placeholder="Ingredientes (separados por coma)..." rows="2" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none"></textarea>
-                <textarea id="receta-pasos" placeholder="Pasos de preparación..." rows="3" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none"></textarea>
-                <div class="flex gap-2">
-                    <button type="submit" class="flex-1 bg-amber-600 text-white py-2 rounded-xl text-xs font-medium">Guardar</button>
-                    <button type="button" onclick="toggleRecetaForm()" class="bg-slate-800 text-slate-400 px-3 py-2 rounded-xl text-xs">Cancelar</button>
-                </div>
-            </form>
-
-            <div id="recetas-list" class="space-y-3">
-                <!-- Recetas injected JS -->
-            </div>
-        </section>
-
-        <!-- ================= GASTOS COMPARTIDOS ================= -->
-        <section id="tab-gastos" class="tab-content hidden animate-fade-in">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <h2 class="text-lg font-bold text-white">Gastos del Hogar</h2>
-                    <p class="text-xs text-slate-400">Control de pagos del mes</p>
-                </div>
-                <div class="text-right">
-                    <span class="text-[10px] uppercase text-slate-400 block font-semibold">Total Acumulado</span>
-                    <span id="gastos-total-badge" class="text-base font-extrabold text-indigo-400">0,00 €</span>
-                </div>
-            </div>
-
-            <!-- Add Expense -->
-            <form onsubmit="addGasto(event)" class="bg-cardBg border border-slate-800 rounded-2xl p-4 mb-4 space-y-3">
-                <input type="text" id="gasto-concepto" placeholder="Concepto (Supermercado, Luz, Internet...)" required class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none">
-                <div class="grid grid-cols-2 gap-2">
-                    <input type="number" step="0.01" id="gasto-importe" placeholder="Importe (€)" required class="bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none">
-                    <select id="gasto-persona" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none">
-                        <option value="Él">Pagado por Él</option>
-                        <option value="Ella">Pagado por Ella</option>
-                        <option value="Fondo Común">Fondo Común</option>
-                    </select>
-                </div>
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 transition-all">
-                    <i data-lucide="plus-circle" class="w-4 h-4"></i> Añadir Gasto
-                </button>
-            </form>
-
-            <div id="gastos-list" class="space-y-2">
-                <!-- Gastos injected JS -->
-            </div>
-        </section>
-
-        <!-- ================= PARKING / COCHE ================= -->
-        <section id="tab-parking" class="tab-content hidden animate-fade-in">
-            <div class="mb-4">
-                <h2 class="text-lg font-bold text-white">¿Dónde está el coche?</h2>
-                <p class="text-xs text-slate-400">Guarda la ubicación GPS o notas del aparcamiento</p>
-            </div>
-
-            <div class="bg-cardBg border border-slate-800 rounded-2xl p-5 mb-4 text-center space-y-4">
-                <div class="inline-flex p-4 rounded-full bg-rose-500/10 text-rose-400">
-                    <i data-lucide="map-pin" class="w-8 h-8"></i>
-                </div>
-                
-                <div id="parking-info" class="text-slate-300 text-sm">
-                    <p class="text-slate-500 text-xs">No hay ubicación guardada actualmente.</p>
-                </div>
-
-                <div class="pt-2 grid grid-cols-1 gap-2">
-                    <button onclick="guardarUbicacionParking()" class="w-full bg-rose-600 hover:bg-rose-500 text-white py-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 active:scale-95 transition-all">
-                        <i data-lucide="navigation" class="w-4 h-4"></i> Guardar Mi Ubicación Actual
-                    </button>
-                    <button id="btn-ver-mapa" onclick="abrirMapaParking()" class="hidden w-full bg-slate-800 hover:bg-slate-700 text-slate-200 py-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 border border-slate-700">
-                        <i data-lucide="external-link" class="w-4 h-4"></i> Abrir en Google Maps
-                    </button>
-                </div>
-            </div>
-
-            <!-- Parking Manual Note -->
-            <div class="bg-cardBg border border-slate-800 rounded-2xl p-4">
-                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Nota Manual (Nivel, Plaza, Calle)</h3>
-                <div class="flex gap-2">
-                    <input type="text" id="parking-nota-input" placeholder="Ej: Planta -2, Plaza 45" class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
-                    <button onclick="guardarNotaParking()" class="bg-slate-800 text-slate-200 px-3 py-2 rounded-xl text-xs font-medium hover:bg-slate-700">Guardar</button>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- BOTTOM NAVIGATION BAR (Thumb Friendly) -->
-    <nav class="fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-lg border-t border-slate-800 px-2 py-2">
-        <div class="max-w-md mx-auto flex items-center justify-around">
-            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn active flex flex-col items-center gap-1 p-2 rounded-xl text-slate-400 transition-all">
-                <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-                <span class="text-[10px] font-medium">Inicio</span>
-            </button>
-            <button onclick="switchTab('compra')" id="nav-compra" class="nav-btn flex flex-col items-center gap-1 p-2 rounded-xl text-slate-400 transition-all">
-                <i data-lucide="shopping-cart" class="w-5 h-5"></i>
-                <span class="text-[10px] font-medium">Compra</span>
-            </button>
-            <button onclick="switchTab('eventos')" id="nav-eventos" class="nav-btn flex flex-col items-center gap-1 p-2 rounded-xl text-slate-400 transition-all">
-                <i data-lucide="calendar" class="w-5 h-5"></i>
-                <span class="text-[10px] font-medium">Agenda</span>
-            </button>
-            <button onclick="switchTab('gastos')" id="nav-gastos" class="nav-btn flex flex-col items-center gap-1 p-2 rounded-xl text-slate-400 transition-all">
-                <i data-lucide="wallet" class="w-5 h-5"></i>
-                <span class="text-[10px] font-medium">Gastos</span>
-            </button>
-            <button onclick="switchTab('parking')" id="nav-parking" class="nav-btn flex flex-col items-center gap-1 p-2 rounded-xl text-slate-400 transition-all">
-                <i data-lucide="car" class="w-5 h-5"></i>
-                <span class="text-[10px] font-medium">Coche</span>
-            </button>
-        </div>
-    </nav>
-
-    <!-- JAVASCRIPT APP LOGIC -->
-    <script>
-        // Data State with LocalStorage fallbacks
-        const store = {
-            compra: JSON.parse(localStorage.getItem('ht_compra')) || [
-                { id: 1, texto: 'Leche entera', completado: false },
-                { id: 2, texto: 'Pan de molde', completado: true }
-            ],
-            eventos: JSON.parse(localStorage.getItem('ht_eventos')) || [
-                { id: 1, titulo: 'Revisión Coche', fecha: '2026-11-15', hora: '10:00' }
-            ],
-            recetas: JSON.parse(localStorage.getItem('ht_recetas')) || [
-                { id: 1, nombre: 'Tortilla de Patatas', ingredientes: 'Patatas, Huevos, Cebolla, Aceite, Sal', pasos: 'Freír patatas con cebolla, batir huevos y cuajar al gusto.' }
-            ],
-            gastos: JSON.parse(localStorage.getItem('ht_gastos')) || [
-                { id: 1, concepto: 'Compra Semanal', importe: 64.50, persona: 'Él', fecha: '2026-11-01' }
-            ],
-            parking: JSON.parse(localStorage.getItem('ht_parking')) || null
-        };
-
-        // Initialize Application
-        document.addEventListener('DOMContentLoaded', () => {
-            setupPWA();
-            renderApp();
-            updateGreeting();
-            lucide.createIcons();
-        });
-
-        function save(key) {
-            localStorage.setItem('ht_' + key, JSON.stringify(store[key]));
-            renderApp();
-        }
-
-        // Greeting update
-        function updateGreeting() {
-            const hour = new Date().getHours();
-            const el = document.getElementById('greeting-time');
-            if (hour < 12) el.innerText = '¡Buenos días! ☀️';
-            else if (hour < 20) el.innerText = '¡Buenas tardes! 🌤️';
-            else el.innerText = '¡Buenas noches! 🌙';
-        }
-
-        // Navigation Engine
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('text-brand-500', 'font-bold');
-                btn.classList.add('text-slate-400');
-            });
-
-            const activeTab = document.getElementById('tab-' + tabId);
-            if(activeTab) activeTab.classList.remove('hidden');
-
-            const activeNav = document.getElementById('nav-' + tabId);
-            if(activeNav) {
-                activeNav.classList.remove('text-slate-400');
-                activeNav.classList.add('text-brand-500', 'font-bold');
-            }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        /* ================= COMPRA MODULE ================= */
-        function renderCompra() {
-            const container = document.getElementById('compra-list');
-            const pendingCount = store.compra.filter(i => !i.completado).length;
-            document.getElementById('dash-compra-count').innerText = pendingCount;
-
-            if (store.compra.length === 0) {
-                container.innerHTML = `<p class="text-center text-slate-500 text-xs py-6">Lista vacía. ¡Añade productos!</p>`;
-                return;
-            }
-
-            container.innerHTML = store.compra.map(item => `
-                <div onclick="toggleCompraItem(${item.id})" class="flex items-center justify-between p-3.5 bg-cardBg border border-slate-800 rounded-xl cursor-pointer active:scale-[0.99] transition-all">
-                    <div class="flex items-center gap-3">
-                        <div class="w-5 h-5 rounded-md border flex items-center justify-center ${item.completado ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-600'}">
-                            ${item.completado ? '<i data-lucide="check" class="w-3.5 h-3.5"></i>' : ''}
-                        </div>
-                        <span class="text-sm ${item.completado ? 'line-through text-slate-500' : 'text-slate-200 font-medium'}">${item.texto}</span>
-                    </div>
-                    <button onclick="event.stopPropagation(); deleteCompraItem(${item.id})" class="text-slate-600 hover:text-rose-400 p-1">
-                        <i data-lucide="trash-2" class="w-4 h-4"></i>
-                    </button>
-                </div>
-            `).join('');
-            lucide.createIcons();
-        }
-
-        function addCompraItem(e) {
-            e.preventDefault();
-            const input = document.getElementById('compra-input');
-            if (!input.value.trim()) return;
-            store.compra.unshift({ id: Date.now(), texto: input.value.trim(), completado: false });
-            input.value = '';
-            save('compra');
-        }
-
-        function toggleCompraItem(id) {
-            store.compra = store.compra.map(i => i.id === id ? { ...i, completado: !i.completado } : i);
-            save('compra');
-        }
-
-        function deleteCompraItem(id) {
-            store.compra = store.compra.filter(i => i.id !== id);
-            save('compra');
-        }
-
-        function limpiarCompraComprados() {
-            store.compra = store.compra.filter(i => !i.completado);
-            save('compra');
-        }
-
-        /* ================= EVENTOS / AGENDA MODULE ================= */
-        function renderEventos() {
-            const container = document.getElementById('eventos-list');
-            document.getElementById('dash-eventos-count').innerText = store.eventos.length;
-
-            if (store.eventos.length === 0) {
-                container.innerHTML = `<p class="text-center text-slate-500 text-xs py-6">No hay eventos ni recordatorios guardados.</p>`;
-                return;
-            }
-
-            container.innerHTML = store.eventos.map(ev => `
-                <div class="p-3.5 bg-cardBg border border-slate-800 rounded-xl flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2 bg-amber-500/10 text-amber-400 rounded-lg">
-                            <i data-lucide="calendar" class="w-4 h-4"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-sm font-semibold text-slate-200">${ev.titulo}</h4>
-                            <p class="text-[11px] text-slate-400">${ev.fecha} ${ev.hora ? '• ' + ev.hora : ''}</p>
-                        </div>
-                    </div>
-                    <button onclick="deleteEvento(${ev.id})" class="text-slate-600 hover:text-rose-400 p-1">
-                        <i data-lucide="trash-2" class="w-4 h-4"></i>
-                    </button>
-                </div>
-            `).join('');
-            lucide.createIcons();
-        }
-
-        function addEvento(e) {
-            e.preventDefault();
-            const titulo = document.getElementById('evento-titulo').value;
-            const fecha = document.getElementById('evento-fecha').value;
-            const hora = document.getElementById('evento-hora').value;
-
-            store.eventos.push({ id: Date.now(), titulo, fecha, hora });
-            document.getElementById('evento-titulo').value = '';
-            document.getElementById('evento-fecha').value = '';
-            document.getElementById('evento-hora').value = '';
-            save('eventos');
-        }
-
-        function deleteEvento(id) {
-            store.eventos = store.eventos.filter(e => e.id !== id);
-            save('eventos');
-        }
-
-        /* ================= RECETARIO MODULE ================= */
-        function renderRecetas() {
-            const container = document.getElementById('recetas-list');
-            if (store.recetas.length === 0) {
-                container.innerHTML = `<p class="text-center text-slate-500 text-xs py-6">Aún no hay recetas guardadas.</p>`;
-                return;
-            }
-
-            container.innerHTML = store.recetas.map(r => `
-                <div class="bg-cardBg border border-slate-800 rounded-2xl p-4 space-y-2">
-                    <div class="flex justify-between items-center">
-                        <h4 class="text-sm font-bold text-slate-200">${r.nombre}</h4>
-                        <button onclick="deleteReceta(${r.id})" class="text-slate-600 hover:text-rose-400">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        </button>
-                    </div>
-                    ${r.ingredientes ? `<p class="text-xs text-amber-300/80 font-medium">🛒 ${r.ingredientes}</p>` : ''}
-                    ${r.pasos ? `<p class="text-xs text-slate-400 bg-slate-900/60 p-2.5 rounded-xl border border-slate-800/80">${r.pasos}</p>` : ''}
-                </div>
-            `).join('');
-            lucide.createIcons();
-        }
-
-        function toggleRecetaForm() {
-            const form = document.getElementById('receta-form');
-            form.classList.toggle('hidden');
-        }
-
-        function addReceta(e) {
-            e.preventDefault();
-            const nombre = document.getElementById('receta-nombre').value;
-            const ingredientes = document.getElementById('receta-ingredientes').value;
-            const pasos = document.getElementById('receta-pasos').value;
-
-            store.recetas.unshift({ id: Date.now(), nombre, ingredientes, pasos });
-            document.getElementById('receta-nombre').value = '';
-            document.getElementById('receta-ingredientes').value = '';
-            document.getElementById('receta-pasos').value = '';
-            toggleRecetaForm();
-            save('recetas');
-        }
-
-        function deleteReceta(id) {
-            store.recetas = store.recetas.filter(r => r.id !== id);
-            save('recetas');
-        }
-
-        /* ================= GASTOS MODULE ================= */
-        function renderGastos() {
-            const container = document.getElementById('gastos-list');
-            const total = store.gastos.reduce((sum, g) => sum + parseFloat(g.importe || 0), 0);
-            
-            document.getElementById('dash-gastos-total').innerText = `${total.toFixed(2)}€`;
-            document.getElementById('gastos-total-badge').innerText = `${total.toFixed(2)} €`;
-
-            if (store.gastos.length === 0) {
-                container.innerHTML = `<p class="text-center text-slate-500 text-xs py-6">Sin gastos registrados este mes.</p>`;
-                return;
-            }
-
-            container.innerHTML = store.gastos.map(g => `
-                <div class="p-3 bg-cardBg border border-slate-800 rounded-xl flex items-center justify-between">
-                    <div>
-                        <h4 class="text-xs font-semibold text-slate-200">${g.concepto}</h4>
-                        <span class="text-[10px] text-indigo-400 font-medium">${g.persona}</span>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <span class="text-sm font-bold text-slate-100">${parseFloat(g.importe).toFixed(2)} €</span>
-                        <button onclick="deleteGasto(${g.id})" class="text-slate-600 hover:text-rose-400">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-            lucide.createIcons();
-        }
-
-        function addGasto(e) {
-            e.preventDefault();
-            const concepto = document.getElementById('gasto-concepto').value;
-            const importe = document.getElementById('gasto-importe').value;
-            const persona = document.getElementById('gasto-persona').value;
-
-            store.gastos.unshift({ id: Date.now(), concepto, importe, persona });
-            document.getElementById('gasto-concepto').value = '';
-            document.getElementById('gasto-importe').value = '';
-            save('gastos');
-        }
-
-        function deleteGasto(id) {
-            store.gastos = store.gastos.filter(g => g.id !== id);
-            save('gastos');
-        }
-
-        /* ================= PARKING MODULE ================= */
-        function renderParking() {
-            const info = document.getElementById('parking-info');
-            const btnMapa = document.getElementById('btn-ver-mapa');
-            const statusBadge = document.getElementById('dash-parking-status');
-
-            if (!store.parking) {
-                info.innerHTML = `<p class="text-slate-500 text-xs">No hay ubicación guardada.</p>`;
-                btnMapa.classList.add('hidden');
-                statusBadge.innerText = 'Sin guardar';
-                statusBadge.classList.replace('bg-rose-500/20', 'bg-slate-800');
-                statusBadge.classList.replace('text-rose-300', 'text-slate-400');
-                return;
-            }
-
-            statusBadge.innerText = 'Guardado';
-            statusBadge.classList.replace('bg-slate-800', 'bg-rose-500/20');
-            statusBadge.classList.replace('text-slate-400', 'text-rose-300');
-
-            let html = '';
-            if (store.parking.coords) {
-                html += `<p class="text-xs font-semibold text-emerald-400 mb-1">📍 Coordenadas GPS guardadas</p>`;
-                html += `<p class="text-[11px] text-slate-400">${store.parking.fecha}</p>`;
-                btnMapa.classList.remove('hidden');
-            }
-            if (store.parking.nota) {
-                html += `<p class="text-xs text-slate-200 mt-2 font-medium">Nota: "${store.parking.nota}"</p>`;
-            }
-
-            info.innerHTML = html;
-        }
-
-        function guardarUbicacionParking() {
-            if (!navigator.geolocation) {
-                alert('La geolocalización no está soportada en este navegador.');
-                return;
-            }
-
-            navigator.geolocation.getCurrentPosition(
-                (pos) => {
-                    store.parking = {
-                        coords: {
-                            lat: pos.coords.latitude,
-                            lng: pos.coords.longitude
-                        },
-                        nota: store.parking?.nota || '',
-                        fecha: new Date().toLocaleString('es-ES')
-                    };
-                    save('parking');
-                },
-                () => {
-                    alert('No se pudo obtener la ubicación. Comprueba los permisos GPS del móvil.');
-                }
-            );
-        }
-
-        function guardarNotaParking() {
-            const nota = document.getElementById('parking-nota-input').value;
-            if (!nota.trim()) return;
-            store.parking = {
-                ...(store.parking || {}),
-                nota: nota.trim(),
-                fecha: new Date().toLocaleString('es-ES')
-            };
-            document.getElementById('parking-nota-input').value = '';
-            save('parking');
-        }
-
-        function abrirMapaParking() {
-            if (store.parking && store.parking.coords) {
-                const url = `https://www.google.com/maps/search/?api=1&query=${store.parking.coords.lat},${store.parking.coords.lng}`;
-                window.open(url, '_blank');
-            }
-        }
-
-        /* ================= RENDER & PWA SETUP ================= */
-        function renderApp() {
-            renderCompra();
-            renderEventos();
-            renderRecetas();
-            renderGastos();
-            renderParking();
-        }
-
-        function setupPWA() {
-            // Generate dynamic Web App Manifest for mobile installation
-            const manifestObj = {
-                name: "HogarTotal",
-                short_name: "HogarTotal",
-                start_url: ".",
-                display: "standalone",
-                background_color: "#0f172a",
-                theme_color: "#1e293b",
-                icons: [{
-                    src: "https://placehold.co/192x192/16a34a/ffffff?text=HT",
-                    sizes: "192x192",
-                    type: "image/png"
-                }]
-            };
-            const stringManifest = JSON.stringify(manifestObj);
-            const blob = new Blob([stringManifest], {type: 'application/json'});
-            const manifestURL = URL.createObjectURL(blob);
-            document.getElementById('manifest-placeholder').setAttribute('href', manifestURL);
-        }
-    </script>
+<body>
+<header><div class="brand"><div class="logo"><i data-lucide="house" color="white"></i></div><div><h1>HogarTotal <span style="color:#61d7aa">2.0</span></h1><small>El centro de vuestro hogar</small></div></div><button class="iconbtn" onclick="go('inicio')" aria-label="Inicio"><i data-lucide="layout-dashboard"></i></button></header>
+<main class="wrap">
+<section id="tab-inicio" class="tab active">
+ <div class="hero"><div class="eyebrow" id="saludo">Bienvenidos a casa</div><h2>¡Hola, Ángel y Cristina!</h2><p>Todo lo importante de vuestro hogar, organizado en un solo lugar.</p>
+  <div class="live-datetime"><div id="homeClock">00:00:00</div><div id="homeDate">Cargando fecha…</div></div>
+ </div>
+ <div class="grid">
+  <div class="card stat" onclick="go('compra')"><div class="stat-top"><span class="ico green"><i data-lucide="shopping-cart"></i></span><span class="pill" id="dashCompra">0</span></div><h3>Lista de compra</h3><p>Productos pendientes</p></div>
+  <div class="card stat" onclick="go('gastos')"><div class="stat-top"><span class="ico blue"><i data-lucide="wallet"></i></span><span class="pill" id="dashGastos">0 €</span></div><h3>Gastos del mes</h3><p>Total registrado este mes</p></div>
+  <div class="card stat" onclick="go('agenda')"><div class="stat-top"><span class="ico amber"><i data-lucide="calendar-days"></i></span><span class="pill" id="dashAgenda">0</span></div><h3>Agenda</h3><p>Próximos recordatorios</p></div>
+  <div class="card stat" onclick="go('medicinas')"><div class="stat-top"><span class="ico red"><i data-lucide="pill"></i></span><span class="pill" id="dashMeds">0</span></div><h3>Medicamentos</h3><p>Tomas pendientes hoy</p></div>
+ </div>
+ <div class="section-title">Acceso rápido</div>
+ <div class="quick">
+  <button onclick="go('tiempo')"><span class="ico cyan"><i data-lucide="cloud-sun"></i></span><span><strong>El tiempo</strong><small>Meteorología de vuestra ubicación</small></span><i data-lucide="chevron-right"></i></button>
+  <button onclick="go('recetas')"><span class="ico amber"><i data-lucide="chef-hat"></i></span><span><strong>Recetario familiar</strong><small>Ideas para comidas y cenas</small></span><i data-lucide="chevron-right"></i></button>
+  <button onclick="go('coche')"><span class="ico red"><i data-lucide="car-front"></i></span><span><strong>¿Dónde está el coche?</strong><small>Ubicación y nota de aparcamiento</small></span><i data-lucide="chevron-right"></i></button>
+  <button onclick="go('datos')"><span class="ico blue"><i data-lucide="database"></i></span><span><strong>Copia de seguridad</strong><small>Exportar o recuperar vuestros datos</small></span><i data-lucide="chevron-right"></i></button>
+ </div>
+</section>
+
+<section id="tab-compra" class="tab">
+ <div class="pagehead"><div><h2>Lista de la compra</h2><p>Lo que falta en casa.</p></div><button class="btn red small" onclick="clearBought()">Limpiar hechos</button></div>
+ <form class="panel" onsubmit="addItem(event,'compra')"><div class="form-title">Añadir producto</div><div class="two"><input id="compraNombre" placeholder="Ej. Leche, pan..." required><input id="compraCantidad" placeholder="Cantidad (opcional)"></div><button class="btn">Añadir a la lista</button></form>
+ <div id="listaCompra" class="list"></div>
+</section>
+
+<section id="tab-agenda" class="tab">
+ <div class="pagehead"><div><h2>Agenda del hogar</h2><p>Citas, pagos y fechas importantes.</p></div></div>
+ <form class="panel" onsubmit="addEvent(event)"><div class="form-title">Nuevo recordatorio</div><input id="evTitulo" placeholder="¿Qué tenemos que recordar?" required><div class="two"><input id="evFecha" type="date" required><input id="evHora" type="time"></div><button class="btn amber">Guardar recordatorio</button></form>
+ <div id="listaAgenda" class="list"></div>
+</section>
+
+<section id="tab-recetas" class="tab">
+ <div class="pagehead"><div><h2>Recetario familiar</h2><p>Vuestras recetas favoritas.</p></div></div>
+ <form class="panel" onsubmit="addRecipe(event)"><div class="form-title">Añadir receta</div><input id="recNombre" placeholder="Nombre del plato" required><textarea id="recIngredientes" rows="2" placeholder="Ingredientes"></textarea><textarea id="recPasos" rows="3" placeholder="Preparación"></textarea><button class="btn amber">Guardar receta</button></form>
+ <div id="listaRecetas" class="list"></div>
+</section>
+
+<section id="tab-gastos" class="tab">
+ <div class="pagehead"><div><h2>Gastos del hogar</h2><p>Control mensual de pagos.</p></div><div style="text-align:right"><small style="color:var(--muted);font-size:9px">TOTAL DEL MES</small><div id="totalGastos" style="font-size:16px;font-weight:800;color:var(--blue)">0 €</div></div></div>
+ <form class="panel" onsubmit="addExpense(event)"><div class="form-title">Registrar gasto</div><input id="gasConcepto" placeholder="Concepto: compra, luz, internet..." required><div class="two"><input id="gasImporte" type="number" min="0.01" step="0.01" placeholder="Importe (€)" required><select id="gasPersona"><option>Ángel</option><option>Cristina</option><option>Fondo común</option></select></div><input id="gasFecha" type="date" required><button class="btn blue">Añadir gasto</button></form>
+ <div id="listaGastos" class="list"></div>
+</section>
+
+<section id="tab-medicinas" class="tab">
+ <div class="pagehead"><div><h2>Control de medicamentos</h2><p>Registro privado de Ángel y Cristina en este dispositivo.</p></div></div>
+ <form class="panel" onsubmit="addMedicine(event)"><div class="form-title">Añadir medicamento</div><input id="medNombre" placeholder="Nombre del medicamento" required><div class="two"><select id="medPersona"><option>Ángel</option><option>Cristina</option></select><input id="medDosis" placeholder="Dosis (ej. 1 comprimido)"></div><div class="two"><input id="medHora" type="time"><input id="medStock" type="number" min="0" step="1" placeholder="Unidades disponibles"></div><input id="medAviso" type="number" min="0" step="1" placeholder="Avisar cuando queden X unidades (opcional)"><button class="btn">Guardar medicamento</button></form>
+ <div class="panel" style="margin-bottom:13px"><div class="form-title">Avisos de toma</div><p style="font-size:10px;color:var(--muted);line-height:1.6;margin:8px 0">Activa las notificaciones para recibir avisos mientras HogarTotal esté abierto. Los avisos del navegador no garantizan alarmas si la aplicación está cerrada.</p><button class="btn secondary" type="button" onclick="enableNotifications()">Activar notificaciones</button></div>
+ <div id="listaMedicinas" class="list"></div>
+ <div class="notice">Importante: HogarTotal es una herramienta de organización, no sustituye las indicaciones médicas. Introducid únicamente las pautas prescritas y verificad siempre dosis y horarios.</div>
+ <div class="section-title">Registro de tomas de hoy</div><div id="registroTomas" class="list"></div>
+</section>
+
+<section id="tab-tiempo" class="tab">
+ <div class="pagehead"><div><h2>El tiempo</h2><p>Previsión meteorológica de vuestra ubicación.</p></div><button class="btn secondary small" onclick="loadWeather()">Actualizar</button></div>
+ <div class="weatherbox" id="weatherBox"><div class="eyebrow">Meteorología</div><h3 style="margin:8px 0">Consulta el tiempo actual</h3><p style="font-size:11px;color:#d2e2f6">Permite el acceso a la ubicación para consultar las condiciones locales.</p><button class="btn" onclick="loadWeather()">Usar mi ubicación</button></div>
+ <div class="notice">La ubicación solo se solicita cuando pulsáis el botón. Los datos meteorológicos se consultan en Open-Meteo. Se necesita conexión a Internet y permiso de ubicación.</div>
+</section>
+
+<section id="tab-coche" class="tab">
+ <div class="pagehead"><div><h2>Aparcamiento</h2><p>Guarda dónde has dejado el coche.</p></div></div>
+ <div class="panel" style="text-align:center;margin-bottom:13px"><span class="ico red" style="margin:auto;width:54px;height:54px"><i data-lucide="map-pin" style="width:25px;height:25px"></i></span><div id="parkingInfo" style="font-size:11px;color:var(--muted);margin:14px 0">Todavía no hay ubicación guardada.</div><button class="btn" onclick="saveParkingGPS()">Guardar ubicación GPS</button><div style="height:8px"></div><button class="btn secondary" id="mapBtn" style="display:none" onclick="openParkingMap()">Abrir en Google Maps</button></div>
+ <form class="panel" onsubmit="saveParkingNote(event)"><div class="form-title">Nota de aparcamiento</div><input id="parkingNota" placeholder="Ej. Calle, planta -2, plaza 45"><button class="btn secondary">Guardar nota</button></form>
+</section>
+
+<section id="tab-datos" class="tab">
+ <div class="pagehead"><div><h2>Datos y seguridad</h2><p>Protege la información de vuestro hogar.</p></div></div>
+ <div class="panel"><h3 style="font-size:13px;margin:0 0 7px">Copia de seguridad</h3><p style="font-size:10px;color:var(--muted);line-height:1.6">Exporta todos los datos a un archivo JSON. Guárdalo en un lugar seguro y úsalo para recuperar la información en otro navegador o dispositivo.</p><button class="btn" onclick="exportData()">Descargar copia de seguridad</button><div style="height:12px"></div><label class="btn secondary" style="display:inline-block">Restaurar copia JSON<input type="file" accept="application/json,.json" onchange="importData(event)" hidden></label></div>
+ <div class="notice">Los datos se guardan en el almacenamiento local de este navegador. Esta versión no sincroniza automáticamente los cambios entre dos móviles. Para compartir datos entre Ángel y Cristina en distintos dispositivos hará falta incorporar una base de datos y autenticación en la nube.</div>
+ <div class="panel" style="margin-top:13px"><h3 style="font-size:13px;margin:0 0 7px">Privacidad</h3><p style="font-size:10px;color:var(--muted);line-height:1.6">Los medicamentos, gastos, agenda y demás registros permanecen en este navegador, salvo que exportéis una copia. No guardéis datos especialmente sensibles en un dispositivo compartido.</p><button class="btn red" onclick="clearAllData()">Borrar todos los datos de HogarTotal</button></div>
+</section>
+</main>
+
+<nav><div class="navinner">
+ <button class="navbtn active" data-tab="inicio" onclick="go('inicio')"><i data-lucide="house"></i><span>Inicio</span></button>
+ <button class="navbtn" data-tab="compra" onclick="go('compra')"><i data-lucide="shopping-cart"></i><span>Compra</span></button>
+ <button class="navbtn" data-tab="agenda" onclick="go('agenda')"><i data-lucide="calendar-days"></i><span>Agenda</span></button>
+ <button class="navbtn" data-tab="gastos" onclick="go('gastos')"><i data-lucide="wallet"></i><span>Gastos</span></button>
+ <button class="navbtn" data-tab="medicinas" onclick="go('medicinas')"><i data-lucide="pill"></i><span>Salud</span></button>
+ <button class="navbtn" data-tab="mas" onclick="go('mas')"><i data-lucide="grid-2x2"></i><span>Más</span></button>
+</div></nav>
+<div class="toast" id="toast"></div>
+<script>
+const KEY='hogartotal20';
+const defaults={compra:[],eventos:[],recetas:[],gastos:[],medicinas:[],tomas:[],parking:null};
+let data=loadData();
+function loadData(){try{return {...defaults,...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch(e){return {...defaults}}}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(data));renderAll()}catch(e){toast('No se pudieron guardar los datos. Comprueba el espacio disponible.')}}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function money(n){return Number(n||0).toLocaleString('es-ES',{style:'currency',currency:'EUR'})}
+function today(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function uid(){return Date.now()+Math.floor(Math.random()*10000)}
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.style.display='block';clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.style.display='none',2600)}
+function go(tab){if(tab==='mas')tab='tiempo';document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));const el=document.getElementById('tab-'+tab);if(el)el.classList.add('active');document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab||(b.dataset.tab==='mas'&&['tiempo','recetas','coche','datos'].includes(tab))));window.scrollTo({top:0,behavior:'smooth'});if(tab==='tiempo'&&!window.weatherLoaded){}}
+function row(title,sub,actions='',cls=''){return `<div class="item ${cls}"><div class="item-main"><h4>${title}</h4><p>${sub||''}</p></div><div class="actions">${actions}</div></div>`}
+function delBtn(fn){return `<button class="iconbtn" onclick="${fn}" aria-label="Eliminar"><i data-lucide="trash-2" width="15"></i></button>`}
+function updateHomeDateTime(){
+ const now=new Date();
+ const clock=document.getElementById('homeClock');
+ const date=document.getElementById('homeDate');
+ if(clock) clock.textContent=new Intl.DateTimeFormat('es-ES',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(now);
+ if(date) date.textContent=new Intl.DateTimeFormat('es-ES',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(now);
+}
+function renderAll(){
+ const pending=data.compra.filter(x=>!x.done).length;document.getElementById('dashCompra').textContent=pending;
+ const month=today().slice(0,7),monthly=data.gastos.filter(x=>(x.fecha||'').startsWith(month)).reduce((s,x)=>s+Number(x.importe||0),0);
+ document.getElementById('dashGastos').textContent=money(monthly);document.getElementById('totalGastos').textContent=money(monthly);
+ document.getElementById('dashAgenda').textContent=data.eventos.filter(x=>x.fecha>=today()).length;
+ document.getElementById('dashMeds').textContent=data.medicinas.filter(m=>m.hora&&!data.tomas.some(t=>t.medId===m.id&&t.fecha===today())).length;
+ document.getElementById('listaCompra').innerHTML=data.compra.length?data.compra.map(x=>row(`<label style="display:flex;gap:9px;align-items:center"><input class="check" type="checkbox" ${x.done?'checked':''} onchange="toggleBuy(${x.id})"><span>${esc(x.nombre)}${x.cantidad?` <small style="color:var(--muted)">· ${esc(x.cantidad)}</small>`:''}</span></label>`,'',delBtn(`removeItem('compra',${x.id})`),x.done?'done':'')).join(''):'<div class="empty">La lista está vacía. Añade lo que necesitéis.</div>';
+ const events=[...data.eventos].sort((a,b)=>(a.fecha+a.hora).localeCompare(b.fecha+b.hora));document.getElementById('listaAgenda').innerHTML=events.length?events.map(x=>row(esc(x.titulo),`${esc(x.fecha)} ${x.hora?'· '+esc(x.hora):''}`,delBtn(`removeItem('eventos',${x.id})`))).join(''):'<div class="empty">No hay recordatorios guardados.</div>';
+ document.getElementById('listaRecetas').innerHTML=data.recetas.length?data.recetas.map(x=>`<div class="item"><div class="item-main"><h4>${esc(x.nombre)}</h4><p><b>Ingredientes:</b> ${esc(x.ingredientes||'—')}<br><b>Preparación:</b> ${esc(x.pasos||'—')}</p></div>${delBtn(`removeItem('recetas',${x.id})`)}</div>`).join(''):'<div class="empty">Todavía no hay recetas guardadas.</div>';
+ const expenses=[...data.gastos].filter(x=>(x.fecha||'').startsWith(month)).sort((a,b)=>b.fecha.localeCompare(a.fecha));document.getElementById('listaGastos').innerHTML=expenses.length?expenses.map(x=>row(esc(x.concepto),`${esc(x.persona)} · ${esc(x.fecha)}`,`<b style="font-size:11px;white-space:nowrap">${money(x.importe)}</b>${delBtn(`removeItem('gastos',${x.id})`)}`)).join(''):'<div class="empty">No hay gastos este mes.</div>';
+ document.getElementById('listaMedicinas').innerHTML=data.medicinas.length?data.medicinas.map(m=>{const low=m.stock!==''&&m.stock!==null&&Number(m.stock)<=Number(m.aviso||0);return `<div class="item"><div class="item-main"><h4>${esc(m.nombre)} <span style="color:var(--muted);font-weight:500">· ${esc(m.persona)}</span></h4><p>${esc(m.dosis||'Dosis no indicada')}${m.hora?' · '+esc(m.hora):''}<br>Existencias: ${m.stock===''?'No indicadas':esc(m.stock)}${low?' · <b style="color:var(--red)">Reponer</b>':''}</p></div><div class="actions">${m.hora?`<button class="iconbtn" title="Registrar toma" onclick="takeMed(${m.id})"><i data-lucide="check" width="15"></i></button>`:''}${delBtn(`removeItem('medicinas',${m.id})`)}</div></div>`}).join(''):'<div class="empty">No hay medicamentos registrados.</div>';
+ const todays=data.tomas.filter(t=>t.fecha===today()).sort((a,b)=>b.momento.localeCompare(a.momento));document.getElementById('registroTomas').innerHTML=todays.length?todays.map(t=>row(esc(t.nombre),`${esc(t.persona)} · ${esc(t.momento)}`,delBtn(`removeItem('tomas',${t.id})`))).join(''):'<div class="empty">Todavía no hay tomas registradas hoy.</div>';
+ if(data.parking){document.getElementById('parkingInfo').innerHTML=`${data.parking.coords?'Ubicación GPS guardada':'Sin coordenadas GPS'}<br>${esc(data.parking.nota||'') }<br><small>${esc(data.parking.fecha||'')}</small>`;document.getElementById('mapBtn').style.display=data.parking.coords?'inline-block':'none'}else{document.getElementById('parkingInfo').textContent='Todavía no hay ubicación guardada.';document.getElementById('mapBtn').style.display='none'}
+ if(window.lucide)lucide.createIcons();
+}
+function addItem(e,type){e.preventDefault();const nombre=document.getElementById('compraNombre').value.trim(),cantidad=document.getElementById('compraCantidad').value.trim();if(!nombre)return;data.compra.unshift({id:uid(),nombre,cantidad,done:false});e.target.reset();persist()}
+function toggleBuy(id){const x=data.compra.find(x=>x.id===id);if(x)x.done=!x.done;persist()}
+function clearBought(){data.compra=data.compra.filter(x=>!x.done);persist()}
+function addEvent(e){e.preventDefault();data.eventos.push({id:uid(),titulo:document.getElementById('evTitulo').value.trim(),fecha:document.getElementById('evFecha').value,hora:document.getElementById('evHora').value});e.target.reset();persist()}
+function addRecipe(e){e.preventDefault();data.recetas.unshift({id:uid(),nombre:document.getElementById('recNombre').value.trim(),ingredientes:document.getElementById('recIngredientes').value.trim(),pasos:document.getElementById('recPasos').value.trim()});e.target.reset();persist()}
+function addExpense(e){e.preventDefault();const amount=Number(document.getElementById('gasImporte').value);if(amount<=0)return toast('Introduce un importe válido.');data.gastos.unshift({id:uid(),concepto:document.getElementById('gasConcepto').value.trim(),importe:amount,persona:document.getElementById('gasPersona').value,fecha:document.getElementById('gasFecha').value||today()});e.target.reset();document.getElementById('gasFecha').value=today();persist()}
+function addMedicine(e){e.preventDefault();data.medicinas.unshift({id:uid(),nombre:document.getElementById('medNombre').value.trim(),persona:document.getElementById('medPersona').value,dosis:document.getElementById('medDosis').value.trim(),hora:document.getElementById('medHora').value,stock:document.getElementById('medStock').value, aviso:document.getElementById('medAviso').value});e.target.reset();persist();toast('Medicamento guardado.')}
+function takeMed(id){const m=data.medicinas.find(x=>x.id===id);if(!m)return;if(!confirm(`¿Registrar la toma de ${m.nombre} (${m.persona}) ahora?`))return;data.tomas.push({id:uid(),medId:id,nombre:m.nombre,persona:m.persona,fecha:today(),momento:new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})});if(m.stock!==''&&Number(m.stock)>0)m.stock=Number(m.stock)-1;persist();toast('Toma registrada.')}
+function removeItem(type,id){if(!confirm('¿Eliminar este registro?'))return;data[type]=data[type].filter(x=>x.id!==id);persist()}
+function enableNotifications(){if(!('Notification'in window))return toast('Este navegador no admite notificaciones.');Notification.requestPermission().then(p=>toast(p==='granted'?'Notificaciones activadas. Mantén HogarTotal abierto.':'No se concedió permiso.'))}
+function checkMedReminders(){if(!('Notification'in window)||Notification.permission!=='granted')return;const now=new Date(),hm=now.toTimeString().slice(0,5);data.medicinas.filter(m=>m.hora===hm&&!data.tomas.some(t=>t.medId===m.id&&t.fecha===today()&&t.momento===hm)).forEach(m=>new Notification('HogarTotal · Medicamento',{body:`${m.persona}: ${m.nombre}${m.dosis?' · '+m.dosis:''}. Registra la toma en la aplicación.`}))}
+function saveParkingGPS(){if(!navigator.geolocation)return toast('Geolocalización no disponible.');navigator.geolocation.getCurrentPosition(p=>{data.parking={...(data.parking||{}),coords:{lat:p.coords.latitude,lng:p.coords.longitude},fecha:new Date().toLocaleString('es-ES')};persist();toast('Ubicación guardada.')},()=>toast('No se pudo obtener la ubicación. Comprueba permisos y conexión.'),{enableHighAccuracy:true,timeout:15000})}
+function saveParkingNote(e){e.preventDefault();const nota=document.getElementById('parkingNota').value.trim();if(!nota)return;data.parking={...(data.parking||{}),nota,fecha:new Date().toLocaleString('es-ES')};e.target.reset();persist()}
+function openParkingMap(){if(data.parking?.coords)window.open(`https://www.google.com/maps?q=${data.parking.coords.lat},${data.parking.coords.lng}`,'_blank','noopener')}
+async function loadWeather(){const box=document.getElementById('weatherBox');if(!navigator.geolocation){box.innerHTML='Este navegador no permite geolocalización.';return}box.innerHTML='<p style="font-size:12px">Solicitando ubicación…</p>';navigator.geolocation.getCurrentPosition(async p=>{try{const {latitude:lat,longitude:lon}=p.coords;const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&forecast_days=3&timezone=auto`);if(!r.ok)throw Error();const j=await r.json(),c=j.current,d=j.daily;const desc=weatherText(c.weather_code),icon=weatherIcon(c.weather_code);box.innerHTML=`<div class="eyebrow">Tiempo actual · Tu ubicación</div><div style="display:flex;align-items:center;justify-content:space-between"><div><div class="weatherbig">${Math.round(c.temperature_2m)}°C</div><div style="font-size:12px">${desc}</div><small style="color:#c3d5ed">Sensación térmica ${Math.round(c.apparent_temperature)}°C</small></div><div style="font-size:48px">${icon}</div></div><div class="weathergrid"><div><small>Humedad</small><b>${c.relative_humidity_2m}%</b></div><div><small>Viento</small><b>${Math.round(c.wind_speed_10m)} km/h</b></div><div><small>Máxima / mínima</small><b>${Math.round(d.temperature_2m_max[0])}° / ${Math.round(d.temperature_2m_min[0])}°</b></div></div><div class="weathergrid">${d.time.map((day,i)=>`<div><small>${i===0?'Hoy':new Date(day+'T12:00:00').toLocaleDateString('es-ES',{weekday:'short'})}</small><b>${Math.round(d.temperature_2m_max[i])}° / ${Math.round(d.temperature_2m_min[i])}°</b><small>Lluvia ${d.precipitation_probability_max[i]??0}%</small></div>`).join('')}</div>`;window.weatherLoaded=true}catch(e){box.innerHTML='<p>No se ha podido consultar el tiempo. Comprueba tu conexión e inténtalo de nuevo.</p><button class="btn" onclick="loadWeather()">Reintentar</button>'}},()=>{box.innerHTML='<p>No se ha concedido acceso a la ubicación.</p><button class="btn" onclick="loadWeather()">Volver a solicitar</button>'},{enableHighAccuracy:false,timeout:15000})}
+function weatherText(c){if(c===0)return'Despejado';if([1,2].includes(c))return'Poco nuboso';if(c===3)return'Nublado';if([45,48].includes(c))return'Niebla';if([51,53,55,56,57].includes(c))return'Llovizna';if([61,63,65,66,67,80,81,82].includes(c))return'Lluvia';if([71,73,75,77,85,86].includes(c))return'Nieve';if([95,96,99].includes(c))return'Tormenta';return'Condiciones variables'}
+function weatherIcon(c){if(c===0)return'☀️';if([1,2].includes(c))return'🌤️';if(c===3)return'☁️';if([45,48].includes(c))return'🌫️';if([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(c))return'🌧️';if([71,73,75,77,85,86].includes(c))return'❄️';if([95,96,99].includes(c))return'⛈️';return'🌡️'}
+function exportData(){const blob=new Blob([JSON.stringify({version:2,exported:new Date().toISOString(),data},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`HogarTotal-copia-${today()}.json`;a.click();URL.revokeObjectURL(a.href);toast('Copia de seguridad descargada.')}
+function importData(e){const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(reader.result),incoming=parsed.data||parsed;if(!confirm('La restauración sustituirá los datos actuales. ¿Continuar?'))return;data={...defaults,...incoming};persist();toast('Copia restaurada correctamente.')}catch(err){toast('El archivo no es una copia válida de HogarTotal.')}};reader.readAsText(file);e.target.value=''}
+function clearAllData(){if(!confirm('Esto eliminará todos los datos guardados en este navegador. ¿Estás seguro?'))return;if(!confirm('Última confirmación: ¿borrar absolutamente todos los registros?'))return;data={...defaults};persist();toast('Datos borrados.')}
+document.addEventListener('DOMContentLoaded',()=>{document.getElementById('saludo').textContent=new Date().getHours()<12?'Buenos días ☀️':new Date().getHours()<20?'Buenas tardes 🌤️':'Buenas noches 🌙';document.getElementById('evFecha').value=today();document.getElementById('gasFecha').value=today();renderAll();updateHomeDateTime();setInterval(updateHomeDateTime,1000);if(window.lucide)lucide.createIcons();setInterval(checkMedReminders,15000);});
+</script>
 </body>
 </html>
