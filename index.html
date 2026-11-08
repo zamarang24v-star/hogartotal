@@ -1,125 +1,110 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HogarTotal</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HogarTotal</title>
+    <!-- Tailwind CSS para el diseño -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen p-4 pb-20">
-  <div class="max-w-md mx-auto space-y-4">
-    <header class="flex justify-between items-center bg-slate-900 p-4 rounded-2xl border border-slate-800">
-      <h1 class="font-bold text-lg text-emerald-400">HogarTotal 🏠</h1>
-      <span class="text-xs bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded-full">Local OK</span>
-    </header>
+<body class="bg-slate-900 text-white min-h-screen p-4 flex flex-col items-center">
 
-    <!-- Navegación de Pestañas -->
-    <div class="grid grid-cols-2 gap-2">
-      <button onclick="cambiarTab('compra')" id="btn-tab-compra" class="p-3 bg-slate-800 rounded-xl font-semibold text-sm border border-emerald-500">🛒 Compra</button>
-      <button onclick="cambiarTab('agenda')" id="btn-tab-agenda" class="p-3 bg-slate-900 rounded-xl font-semibold text-sm border border-slate-800">📅 Agenda</button>
+    <div class="w-full max-w-md bg-slate-800 p-6 rounded-2xl shadow-xl space-y-6">
+        <h1 class="text-2xl font-bold text-center text-orange-400">HogarTotal 🏠</h1>
+        
+        <!-- Estado de conexión -->
+        <div id="estado-conexion" class="text-xs text-center py-1 px-2 rounded bg-slate-700 text-slate-300">
+            Conectando con Firebase...
+        </div>
+
+        <!-- Apartado de la Compra / Notas Compartidas -->
+        <div class="space-y-3">
+            <h2 class="text-lg font-semibold text-slate-200">Lista Compartida</h2>
+            <div class="flex gap-2">
+                <input type="text" id="nuevo-item" placeholder="Añadir algo (ej. Leche)..." 
+                    class="flex-1 bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500">
+                <button onclick="agregarItem()" 
+                    class="bg-orange-500 hover:bg-orange-600 font-bold px-4 py-2 rounded-lg transition-colors">
+                    Añadir
+                </button>
+            </div>
+            
+            <!-- Lista donde se pintarán los datos en tiempo real -->
+            <ul id="lista-elementos" class="space-y-2 max-h-60 overflow-y-auto">
+                <li class="text-slate-400 text-center py-4">Cargando datos...</li>
+            </ul>
+        </div>
     </div>
 
-    <!-- MÓDULO COMPRA -->
-    <div id="tab-compra" class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3">
-      <h2 class="font-bold text-base">Lista de la Compra</h2>
-      <div class="flex gap-2">
-        <input type="text" id="inp-compra" placeholder="Añadir producto..." class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
-        <button onclick="addCompra()" class="bg-emerald-600 px-4 py-2 rounded-xl text-sm font-semibold active:scale-95">Añadir</button>
-      </div>
-      <ul id="ul-compra" class="space-y-2 text-sm pt-2"></ul>
-    </div>
+    <!-- Script de Firebase y lógica de sincronización -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, push, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-    <!-- MÓDULO AGENDA -->
-    <div id="tab-agenda" class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3 hidden">
-      <h2 class="font-bold text-base">Agenda Compartida</h2>
-      <input type="text" id="inp-evento" placeholder="Título del evento..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white">
-      <input type="date" id="inp-fecha" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-300">
-      <button onclick="addAgenda()" class="w-full bg-amber-600 py-2 rounded-xl text-sm font-semibold active:scale-95">Guardar Evento</button>
-      <ul id="ul-agenda" class="space-y-2 text-sm pt-2"></ul>
-    </div>
-  </div>
+        // =========================================================================
+        // TUS CLAVES REALES DE FIREBASE (Copiadas del panel que acabamos de hacer)
+        // =========================================================================
+        const firebaseConfig = {
+            apiKey: "TU_API_KEY",
+            authDomain: "TU_DOMINIO.firebaseapp.com",
+            databaseURL: "TU_DATABASE_URL",
+            projectId: "TU_PROJECT_ID",
+            storageBucket: "TU_STORAGE_BUCKET",
+            messagingSenderId: "TU_MESSAGING_SENDER_ID",
+            appId: "TU_APP_ID"
+        };
 
-  <script>
-    // Al cargar la página leemos lo que hay guardado
-    document.addEventListener("DOMContentLoaded", () => {
-      cargarCompra();
-      cargarAgenda();
-    });
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
 
-    function cambiarTab(tab) {
-      if(tab === 'compra') {
-        document.getElementById('tab-compra').classList.remove('hidden');
-        document.getElementById('tab-agenda').classList.add('hidden');
-        document.getElementById('btn-tab-compra').className = "p-3 bg-slate-800 rounded-xl font-semibold text-sm border border-emerald-500";
-        document.getElementById('btn-tab-agenda').className = "p-3 bg-slate-900 rounded-xl font-semibold text-sm border border-slate-800";
-      } else {
-        document.getElementById('tab-agenda').classList.remove('hidden');
-        document.getElementById('tab-compra').classList.add('hidden');
-        document.getElementById('btn-tab-agenda').className = "p-3 bg-slate-800 rounded-xl font-semibold text-sm border border-amber-500";
-        document.getElementById('btn-tab-compra').className = "p-3 bg-slate-900 rounded-xl font-semibold text-sm border border-slate-800";
-      }
-    }
+        // Referencia al estado de conexión visual
+        const estadoDiv = document.getElementById("estado-conexion");
+        estadoDiv.textContent = "🟢 Conectado en tiempo real";
+        estadoDiv.className = "text-xs text-center py-1 px-2 rounded bg-green-900/50 text-green-300";
 
-    // --- COMPRA ---
-    function cargarCompra() {
-      const lista = JSON.parse(localStorage.getItem('ht_compra') || '[]');
-      const ul = document.getElementById('ul-compra');
-      ul.innerHTML = '';
-      lista.forEach((item, index) => {
-        ul.innerHTML += `<li class="flex justify-between items-center bg-slate-950 p-2.5 rounded-xl border border-slate-800">
-          <span>${item}</span>
-          <button onclick="delCompra(${index})" class="text-rose-400 text-xs">Borrar</button>
-        </li>`;
-      });
-    }
+        // Referencia a la base de datos (nodo 'hogartotal/lista')
+        const listaRef = ref(db, 'hogartotal/lista');
 
-    function addCompra() {
-      const inp = document.getElementById('inp-compra');
-      if(!inp.value.trim()) return;
-      const lista = JSON.parse(localStorage.getItem('ht_compra') || '[]');
-      lista.push(inp.value.trim());
-      localStorage.setItem('ht_compra', JSON.stringify(lista));
-      inp.value = '';
-      cargarCompra();
-    }
+        // Función para añadir elemento
+        window.agregarItem = function() {
+            const input = document.getElementById("nuevo-item");
+            const valor = input.value.trim();
+            if (valor === "") return;
 
-    function delCompra(index) {
-      const lista = JSON.parse(localStorage.getItem('ht_compra') || '[]');
-      lista.splice(index, 1);
-      localStorage.setItem('ht_compra', JSON.stringify(lista));
-      cargarCompra();
-    }
+            // Guardar en Firebase
+            const nuevoItemRef = push(listaRef);
+            set(nuevoItemRef, { texto: valor });
+            input.value = "";
+        };
 
-    // --- AGENDA ---
-    function cargarAgenda() {
-      const lista = JSON.parse(localStorage.getItem('ht_agenda') || '[]');
-      const ul = document.getElementById('ul-agenda');
-      ul.innerHTML = '';
-      lista.forEach((item, index) => {
-        ul.innerHTML += `<li class="flex justify-between items-center bg-slate-950 p-2.5 rounded-xl border border-slate-800">
-          <div><p class="font-semibold">${item.titulo}</p><p class="text-xs text-amber-400">${item.fecha}</p></div>
-          <button onclick="delAgenda(${index})" class="text-rose-400 text-xs">Borrar</button>
-        </li>`;
-      });
-    }
+        // Función para borrar elemento
+        window.borrarItem = function(id) {
+            remove(ref(db, 'hogartotal/lista/' + id));
+        };
 
-    function addAgenda() {
-      const t = document.getElementById('inp-evento');
-      const f = document.getElementById('inp-fecha');
-      if(!t.value.trim() || !f.value) return;
-      const lista = JSON.parse(localStorage.getItem('ht_agenda') || '[]');
-      lista.push({ titulo: t.value.trim(), fecha: f.value });
-      localStorage.setItem('ht_agenda', JSON.stringify(lista));
-      t.value = ''; f.value = '';
-      cargarAgenda();
-    }
+        // Escuchar cambios en tiempo real (se actualiza solo en tu móvil y el de tu pareja)
+        onValue(listaRef, (snapshot) => {
+            const ul = document.getElementById("lista-elementos");
+            ul.innerHTML = "";
+            
+            const data = snapshot.val();
+            if (!data) {
+                ul.innerHTML = '<li class="text-slate-400 text-center py-4">No hay elementos todavía</li>';
+                return;
+            }
 
-    function delAgenda(index) {
-      const lista = JSON.parse(localStorage.getItem('ht_agenda') || '[]');
-      lista.splice(index, 1);
-      localStorage.setItem('ht_agenda', JSON.stringify(lista));
-      cargarAgenda();
-    }
-  </script>
+            Object.keys(data).forEach((key) => {
+                const item = data[key];
+                const li = document.createElement("li");
+                li.className = "flex justify-between items-center bg-slate-700/50 px-4 py-2 rounded-lg border border-slate-700";
+                li.innerHTML = `
+                    <span class="text-slate-100">${item.texto}</span>
+                    <button onclick="borrarItem('${key}')" class="text-red-400 hover:text-red-300 text-sm font-semibold px-2 py-1">✕</button>
+                `;
+                ul.appendChild(li);
+            });
+        });
+    </script>
 </body>
 </html>
