@@ -2,109 +2,714 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HogarTotal</title>
-    <!-- Tailwind CSS para el diseño -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HogarTotal - Organización de Casa</title>
+    
+    <!-- Web App Capabilities & Mobile Meta -->
+    <meta name="theme-color" content="#1e293b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="description" content="Aplicación de organización compartida para el hogar y la pareja">
+
+    <!-- Web App Manifest (Data Dynamic URL Generator below or standard JSON) -->
+    <link rel="manifest" id="manifest-placeholder">
+
+    <!-- Font & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                        },
+                        darkBg: '#0f172a',
+                        cardBg: '#1e293b',
+                        accent: '#6366f1'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Touch Friendly Custom Enhancements */
+        body {
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+        .pb-safe {
+            padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.2s ease-in-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
-<body class="bg-slate-900 text-white min-h-screen p-4 flex flex-col items-center">
+<body class="bg-darkBg text-slate-100 font-sans antialiased min-h-screen pb-safe">
 
-    <div class="w-full max-w-md bg-slate-800 p-6 rounded-2xl shadow-xl space-y-6">
-        <h1 class="text-2xl font-bold text-center text-orange-400">HogarTotal 🏠</h1>
-        
-        <!-- Estado de conexión -->
-        <div id="estado-conexion" class="text-xs text-center py-1 px-2 rounded bg-slate-700 text-slate-300">
-            Conectando con Firebase...
+    <!-- TOP HEADER -->
+    <header class="sticky top-0 z-30 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 py-3.5 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+            <div class="bg-gradient-to-tr from-brand-600 to-indigo-500 p-2 rounded-xl shadow-lg shadow-brand-500/10">
+                <i data-lucide="home" class="w-5 h-5 text-white"></i>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold tracking-tight text-white leading-none">HogarTotal</h1>
+                <span class="text-[10px] font-medium text-slate-400 tracking-wide uppercase">Espacio de Pareja</span>
+            </div>
         </div>
+        <button onclick="switchTab('dashboard')" class="p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white active:scale-95 transition-all">
+            <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+        </button>
+    </header>
 
-        <!-- Apartado de la Compra / Notas Compartidas -->
-        <div class="space-y-3">
-            <h2 class="text-lg font-semibold text-slate-200">Lista Compartida</h2>
-            <div class="flex gap-2">
-                <input type="text" id="nuevo-item" placeholder="Añadir algo (ej. Leche)..." 
-                    class="flex-1 bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500">
-                <button onclick="agregarItem()" 
-                    class="bg-orange-500 hover:bg-orange-600 font-bold px-4 py-2 rounded-lg transition-colors">
-                    Añadir
+    <!-- MAIN CONTAINER WITH TABS -->
+    <main class="max-w-md mx-auto px-4 pt-4">
+
+        <!-- ================= DASHBOARD TAB ================= -->
+        <section id="tab-dashboard" class="tab-content animate-fade-in">
+            <!-- Greeting Card -->
+            <div class="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-indigo-700 to-slate-900 rounded-2xl p-5 mb-5 shadow-xl">
+                <div class="relative z-10">
+                    <span id="greeting-time" class="inline-block px-2.5 py-1 rounded-full bg-white/10 text-xs font-semibold text-indigo-200 mb-2">¡Buenas! 👋</span>
+                    <h2 class="text-xl font-bold text-white mb-1">¡Hola de nuevo!</h2>
+                    <p class="text-xs text-indigo-200/80">Todo listo y sincronizado en vuestro hogar.</p>
+                </div>
+                <i data-lucide="sparkles" class="absolute -right-2 -bottom-2 w-28 h-28 text-white/5 pointer-events-none"></i>
+            </div>
+
+            <!-- Summary Widgets Grid -->
+            <div class="grid grid-cols-2 gap-3.5 mb-5">
+                <div onclick="switchTab('compra')" class="bg-cardBg p-4 rounded-2xl border border-slate-800 shadow-md active:scale-95 transition-all cursor-pointer">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="p-2 rounded-xl bg-emerald-500/10 text-emerald-400">
+                            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                        </span>
+                        <span id="dash-compra-count" class="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">0</span>
+                    </div>
+                    <h3 class="text-sm font-semibold text-slate-200">Compra</h3>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Pendientes</p>
+                </div>
+
+                <div onclick="switchTab('gastos')" class="bg-cardBg p-4 rounded-2xl border border-slate-800 shadow-md active:scale-95 transition-all cursor-pointer">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="p-2 rounded-xl bg-indigo-500/10 text-indigo-400">
+                            <i data-lucide="wallet" class="w-5 h-5"></i>
+                        </span>
+                        <span id="dash-gastos-total" class="text-xs font-bold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300">0€</span>
+                    </div>
+                    <h3 class="text-sm font-semibold text-slate-200">Gastos Mes</h3>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Total registrado</p>
+                </div>
+
+                <div onclick="switchTab('eventos')" class="bg-cardBg p-4 rounded-2xl border border-slate-800 shadow-md active:scale-95 transition-all cursor-pointer">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="p-2 rounded-xl bg-amber-500/10 text-amber-400">
+                            <i data-lucide="calendar" class="w-5 h-5"></i>
+                        </span>
+                        <span id="dash-eventos-count" class="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300">0</span>
+                    </div>
+                    <h3 class="text-sm font-semibold text-slate-200">Agenda</h3>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Próximos eventos</p>
+                </div>
+
+                <div onclick="switchTab('parking')" class="bg-cardBg p-4 rounded-2xl border border-slate-800 shadow-md active:scale-95 transition-all cursor-pointer">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="p-2 rounded-xl bg-rose-500/10 text-rose-400">
+                            <i data-lucide="car" class="w-5 h-5"></i>
+                        </span>
+                        <span id="dash-parking-status" class="text-xs font-bold px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300">Ver</span>
+                    </div>
+                    <h3 class="text-sm font-semibold text-slate-200">Coche</h3>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Aparcamiento</p>
+                </div>
+            </div>
+
+            <!-- Fast Modules Shortcuts list -->
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 px-1">Acceso Rápido</h3>
+            <div class="space-y-2.5">
+                <button onclick="switchTab('recetas')" class="w-full bg-cardBg border border-slate-800 p-3.5 rounded-2xl flex items-center justify-between active:scale-[0.98] transition-all">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2.5 rounded-xl bg-amber-500/10 text-amber-400">
+                            <i data-lucide="utensils" class="w-5 h-5"></i>
+                        </div>
+                        <div class="text-left">
+                            <div class="text-sm font-semibold text-slate-200">Recetario Familiar</div>
+                            <div class="text-xs text-slate-400">Consulta o añade platos para la semana</div>
+                        </div>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500"></i>
                 </button>
             </div>
-            
-            <!-- Lista donde se pintarán los datos en tiempo real -->
-            <ul id="lista-elementos" class="space-y-2 max-h-60 overflow-y-auto">
-                <li class="text-slate-400 text-center py-4">Cargando datos...</li>
-            </ul>
+        </section>
+
+        <!-- ================= LISTA DE LA COMPRA ================= -->
+        <section id="tab-compra" class="tab-content hidden animate-fade-in">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h2 class="text-lg font-bold text-white">Lista de la Compra</h2>
+                    <p class="text-xs text-slate-400">Tacha lo que metáis en el carro</p>
+                </div>
+                <button onclick="limpiarCompraComprados()" class="px-3 py-1.5 bg-rose-500/10 text-rose-400 rounded-xl text-xs font-medium hover:bg-rose-500/20 transition-all">
+                    Limpiar listos
+                </button>
+            </div>
+
+            <!-- Form Add -->
+            <form onsubmit="addCompraItem(event)" class="flex gap-2 mb-4">
+                <input type="text" id="compra-input" placeholder="Ej: Leche, Fruta, Pan..." required class="flex-1 bg-cardBg border border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-all">
+                <button type="submit" class="bg-brand-600 hover:bg-brand-500 text-white p-3 rounded-xl flex items-center justify-center active:scale-95 transition-all">
+                    <i data-lucide="plus" class="w-5 h-5"></i>
+                </button>
+            </form>
+
+            <!-- List -->
+            <div id="compra-list" class="space-y-2">
+                <!-- Items injected JS -->
+            </div>
+        </section>
+
+        <!-- ================= CALENDARIO / AGENDA ================= -->
+        <section id="tab-eventos" class="tab-content hidden animate-fade-in">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h2 class="text-lg font-bold text-white">Agenda del Hogar</h2>
+                    <p class="text-xs text-slate-400">Citas, pagos y notas importantes</p>
+                </div>
+            </div>
+
+            <!-- Form Add Event -->
+            <form onsubmit="addEvento(event)" class="bg-cardBg border border-slate-800 rounded-2xl p-4 mb-5 space-y-3 shadow-md">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Añadir Recordatorio</h3>
+                <input type="text" id="evento-titulo" placeholder="Título del evento..." required class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-500">
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="date" id="evento-fecha" required class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500">
+                    <input type="time" id="evento-hora" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500">
+                </div>
+                <button type="submit" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-medium py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 transition-all">
+                    <i data-lucide="calendar-plus" class="w-4 h-4"></i> Guardar Evento
+                </button>
+            </form>
+
+            <!-- Event List -->
+            <div id="eventos-list" class="space-y-2.5">
+                <!-- Events injected JS -->
+            </div>
+        </section>
+
+        <!-- ================= RECETARIO ================= -->
+        <section id="tab-recetas" class="tab-content hidden animate-fade-in">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h2 class="text-lg font-bold text-white">Recetario</h2>
+                    <p class="text-xs text-slate-400">Ideas para comidas y cenas</p>
+                </div>
+                <button onclick="toggleRecetaForm()" class="bg-amber-600/20 text-amber-400 px-3 py-1.5 rounded-xl text-xs font-semibold hover:bg-amber-600/30 transition-all flex items-center gap-1.5">
+                    <i data-lucide="plus" class="w-4 h-4"></i> Nueva
+                </button>
+            </div>
+
+            <!-- Modal/Form Hidden -->
+            <form id="receta-form" onsubmit="addReceta(event)" class="hidden bg-cardBg border border-slate-800 rounded-2xl p-4 mb-5 space-y-3">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Nueva Receta</h3>
+                <input type="text" id="receta-nombre" placeholder="Nombre (Ej: Paella, Lasaña...)" required class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-white focus:outline-none">
+                <textarea id="receta-ingredientes" placeholder="Ingredientes (separados por coma)..." rows="2" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none"></textarea>
+                <textarea id="receta-pasos" placeholder="Pasos de preparación..." rows="3" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none"></textarea>
+                <div class="flex gap-2">
+                    <button type="submit" class="flex-1 bg-amber-600 text-white py-2 rounded-xl text-xs font-medium">Guardar</button>
+                    <button type="button" onclick="toggleRecetaForm()" class="bg-slate-800 text-slate-400 px-3 py-2 rounded-xl text-xs">Cancelar</button>
+                </div>
+            </form>
+
+            <div id="recetas-list" class="space-y-3">
+                <!-- Recetas injected JS -->
+            </div>
+        </section>
+
+        <!-- ================= GASTOS COMPARTIDOS ================= -->
+        <section id="tab-gastos" class="tab-content hidden animate-fade-in">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h2 class="text-lg font-bold text-white">Gastos del Hogar</h2>
+                    <p class="text-xs text-slate-400">Control de pagos del mes</p>
+                </div>
+                <div class="text-right">
+                    <span class="text-[10px] uppercase text-slate-400 block font-semibold">Total Acumulado</span>
+                    <span id="gastos-total-badge" class="text-base font-extrabold text-indigo-400">0,00 €</span>
+                </div>
+            </div>
+
+            <!-- Add Expense -->
+            <form onsubmit="addGasto(event)" class="bg-cardBg border border-slate-800 rounded-2xl p-4 mb-4 space-y-3">
+                <input type="text" id="gasto-concepto" placeholder="Concepto (Supermercado, Luz, Internet...)" required class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none">
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="number" step="0.01" id="gasto-importe" placeholder="Importe (€)" required class="bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none">
+                    <select id="gasto-persona" class="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none">
+                        <option value="Él">Pagado por Él</option>
+                        <option value="Ella">Pagado por Ella</option>
+                        <option value="Fondo Común">Fondo Común</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 transition-all">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i> Añadir Gasto
+                </button>
+            </form>
+
+            <div id="gastos-list" class="space-y-2">
+                <!-- Gastos injected JS -->
+            </div>
+        </section>
+
+        <!-- ================= PARKING / COCHE ================= -->
+        <section id="tab-parking" class="tab-content hidden animate-fade-in">
+            <div class="mb-4">
+                <h2 class="text-lg font-bold text-white">¿Dónde está el coche?</h2>
+                <p class="text-xs text-slate-400">Guarda la ubicación GPS o notas del aparcamiento</p>
+            </div>
+
+            <div class="bg-cardBg border border-slate-800 rounded-2xl p-5 mb-4 text-center space-y-4">
+                <div class="inline-flex p-4 rounded-full bg-rose-500/10 text-rose-400">
+                    <i data-lucide="map-pin" class="w-8 h-8"></i>
+                </div>
+                
+                <div id="parking-info" class="text-slate-300 text-sm">
+                    <p class="text-slate-500 text-xs">No hay ubicación guardada actualmente.</p>
+                </div>
+
+                <div class="pt-2 grid grid-cols-1 gap-2">
+                    <button onclick="guardarUbicacionParking()" class="w-full bg-rose-600 hover:bg-rose-500 text-white py-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 active:scale-95 transition-all">
+                        <i data-lucide="navigation" class="w-4 h-4"></i> Guardar Mi Ubicación Actual
+                    </button>
+                    <button id="btn-ver-mapa" onclick="abrirMapaParking()" class="hidden w-full bg-slate-800 hover:bg-slate-700 text-slate-200 py-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 border border-slate-700">
+                        <i data-lucide="external-link" class="w-4 h-4"></i> Abrir en Google Maps
+                    </button>
+                </div>
+            </div>
+
+            <!-- Parking Manual Note -->
+            <div class="bg-cardBg border border-slate-800 rounded-2xl p-4">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Nota Manual (Nivel, Plaza, Calle)</h3>
+                <div class="flex gap-2">
+                    <input type="text" id="parking-nota-input" placeholder="Ej: Planta -2, Plaza 45" class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                    <button onclick="guardarNotaParking()" class="bg-slate-800 text-slate-200 px-3 py-2 rounded-xl text-xs font-medium hover:bg-slate-700">Guardar</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- BOTTOM NAVIGATION BAR (Thumb Friendly) -->
+    <nav class="fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-lg border-t border-slate-800 px-2 py-2">
+        <div class="max-w-md mx-auto flex items-center justify-around">
+            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn active flex flex-col items-center gap-1 p-2 rounded-xl text-slate-400 transition-all">
+                <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                <span class="text-[10px] font-medium">Inicio</span>
+            </button>
+            <button onclick="switchTab('compra')" id="nav-compra" class="nav-btn flex flex-col items-center gap-1 p-2 rounded-xl text-slate-400 transition-all">
+                <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                <span class="text-[10px] font-medium">Compra</span>
+            </button>
+            <button onclick="switchTab('eventos')" id="nav-eventos" class="nav-btn flex flex-col items-center gap-1 p-2 rounded-xl text-slate-400 transition-all">
+                <i data-lucide="calendar" class="w-5 h-5"></i>
+                <span class="text-[10px] font-medium">Agenda</span>
+            </button>
+            <button onclick="switchTab('gastos')" id="nav-gastos" class="nav-btn flex flex-col items-center gap-1 p-2 rounded-xl text-slate-400 transition-all">
+                <i data-lucide="wallet" class="w-5 h-5"></i>
+                <span class="text-[10px] font-medium">Gastos</span>
+            </button>
+            <button onclick="switchTab('parking')" id="nav-parking" class="nav-btn flex flex-col items-center gap-1 p-2 rounded-xl text-slate-400 transition-all">
+                <i data-lucide="car" class="w-5 h-5"></i>
+                <span class="text-[10px] font-medium">Coche</span>
+            </button>
         </div>
-    </div>
+    </nav>
 
-    <!-- Script de Firebase y lógica de sincronización -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, push, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
-        // =========================================================================
-        // TUS CLAVES REALES DE FIREBASE (Copiadas del panel que acabamos de hacer)
-        // =========================================================================
-        const firebaseConfig = {
-            apiKey: "TU_API_KEY",
-            authDomain: "TU_DOMINIO.firebaseapp.com",
-            databaseURL: "TU_DATABASE_URL",
-            projectId: "TU_PROJECT_ID",
-            storageBucket: "TU_STORAGE_BUCKET",
-            messagingSenderId: "TU_MESSAGING_SENDER_ID",
-            appId: "TU_APP_ID"
+    <!-- JAVASCRIPT APP LOGIC -->
+    <script>
+        // Data State with LocalStorage fallbacks
+        const store = {
+            compra: JSON.parse(localStorage.getItem('ht_compra')) || [
+                { id: 1, texto: 'Leche entera', completado: false },
+                { id: 2, texto: 'Pan de molde', completado: true }
+            ],
+            eventos: JSON.parse(localStorage.getItem('ht_eventos')) || [
+                { id: 1, titulo: 'Revisión Coche', fecha: '2026-11-15', hora: '10:00' }
+            ],
+            recetas: JSON.parse(localStorage.getItem('ht_recetas')) || [
+                { id: 1, nombre: 'Tortilla de Patatas', ingredientes: 'Patatas, Huevos, Cebolla, Aceite, Sal', pasos: 'Freír patatas con cebolla, batir huevos y cuajar al gusto.' }
+            ],
+            gastos: JSON.parse(localStorage.getItem('ht_gastos')) || [
+                { id: 1, concepto: 'Compra Semanal', importe: 64.50, persona: 'Él', fecha: '2026-11-01' }
+            ],
+            parking: JSON.parse(localStorage.getItem('ht_parking')) || null
         };
 
-        // Inicializar Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+        // Initialize Application
+        document.addEventListener('DOMContentLoaded', () => {
+            setupPWA();
+            renderApp();
+            updateGreeting();
+            lucide.createIcons();
+        });
 
-        // Referencia al estado de conexión visual
-        const estadoDiv = document.getElementById("estado-conexion");
-        estadoDiv.textContent = "🟢 Conectado en tiempo real";
-        estadoDiv.className = "text-xs text-center py-1 px-2 rounded bg-green-900/50 text-green-300";
+        function save(key) {
+            localStorage.setItem('ht_' + key, JSON.stringify(store[key]));
+            renderApp();
+        }
 
-        // Referencia a la base de datos (nodo 'hogartotal/lista')
-        const listaRef = ref(db, 'hogartotal/lista');
+        // Greeting update
+        function updateGreeting() {
+            const hour = new Date().getHours();
+            const el = document.getElementById('greeting-time');
+            if (hour < 12) el.innerText = '¡Buenos días! ☀️';
+            else if (hour < 20) el.innerText = '¡Buenas tardes! 🌤️';
+            else el.innerText = '¡Buenas noches! 🌙';
+        }
 
-        // Función para añadir elemento
-        window.agregarItem = function() {
-            const input = document.getElementById("nuevo-item");
-            const valor = input.value.trim();
-            if (valor === "") return;
+        // Navigation Engine
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-brand-500', 'font-bold');
+                btn.classList.add('text-slate-400');
+            });
 
-            // Guardar en Firebase
-            const nuevoItemRef = push(listaRef);
-            set(nuevoItemRef, { texto: valor });
-            input.value = "";
-        };
+            const activeTab = document.getElementById('tab-' + tabId);
+            if(activeTab) activeTab.classList.remove('hidden');
 
-        // Función para borrar elemento
-        window.borrarItem = function(id) {
-            remove(ref(db, 'hogartotal/lista/' + id));
-        };
+            const activeNav = document.getElementById('nav-' + tabId);
+            if(activeNav) {
+                activeNav.classList.remove('text-slate-400');
+                activeNav.classList.add('text-brand-500', 'font-bold');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
-        // Escuchar cambios en tiempo real (se actualiza solo en tu móvil y el de tu pareja)
-        onValue(listaRef, (snapshot) => {
-            const ul = document.getElementById("lista-elementos");
-            ul.innerHTML = "";
-            
-            const data = snapshot.val();
-            if (!data) {
-                ul.innerHTML = '<li class="text-slate-400 text-center py-4">No hay elementos todavía</li>';
+        /* ================= COMPRA MODULE ================= */
+        function renderCompra() {
+            const container = document.getElementById('compra-list');
+            const pendingCount = store.compra.filter(i => !i.completado).length;
+            document.getElementById('dash-compra-count').innerText = pendingCount;
+
+            if (store.compra.length === 0) {
+                container.innerHTML = `<p class="text-center text-slate-500 text-xs py-6">Lista vacía. ¡Añade productos!</p>`;
                 return;
             }
 
-            Object.keys(data).forEach((key) => {
-                const item = data[key];
-                const li = document.createElement("li");
-                li.className = "flex justify-between items-center bg-slate-700/50 px-4 py-2 rounded-lg border border-slate-700";
-                li.innerHTML = `
-                    <span class="text-slate-100">${item.texto}</span>
-                    <button onclick="borrarItem('${key}')" class="text-red-400 hover:text-red-300 text-sm font-semibold px-2 py-1">✕</button>
-                `;
-                ul.appendChild(li);
-            });
-        });
+            container.innerHTML = store.compra.map(item => `
+                <div onclick="toggleCompraItem(${item.id})" class="flex items-center justify-between p-3.5 bg-cardBg border border-slate-800 rounded-xl cursor-pointer active:scale-[0.99] transition-all">
+                    <div class="flex items-center gap-3">
+                        <div class="w-5 h-5 rounded-md border flex items-center justify-center ${item.completado ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-600'}">
+                            ${item.completado ? '<i data-lucide="check" class="w-3.5 h-3.5"></i>' : ''}
+                        </div>
+                        <span class="text-sm ${item.completado ? 'line-through text-slate-500' : 'text-slate-200 font-medium'}">${item.texto}</span>
+                    </div>
+                    <button onclick="event.stopPropagation(); deleteCompraItem(${item.id})" class="text-slate-600 hover:text-rose-400 p-1">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function addCompraItem(e) {
+            e.preventDefault();
+            const input = document.getElementById('compra-input');
+            if (!input.value.trim()) return;
+            store.compra.unshift({ id: Date.now(), texto: input.value.trim(), completado: false });
+            input.value = '';
+            save('compra');
+        }
+
+        function toggleCompraItem(id) {
+            store.compra = store.compra.map(i => i.id === id ? { ...i, completado: !i.completado } : i);
+            save('compra');
+        }
+
+        function deleteCompraItem(id) {
+            store.compra = store.compra.filter(i => i.id !== id);
+            save('compra');
+        }
+
+        function limpiarCompraComprados() {
+            store.compra = store.compra.filter(i => !i.completado);
+            save('compra');
+        }
+
+        /* ================= EVENTOS / AGENDA MODULE ================= */
+        function renderEventos() {
+            const container = document.getElementById('eventos-list');
+            document.getElementById('dash-eventos-count').innerText = store.eventos.length;
+
+            if (store.eventos.length === 0) {
+                container.innerHTML = `<p class="text-center text-slate-500 text-xs py-6">No hay eventos ni recordatorios guardados.</p>`;
+                return;
+            }
+
+            container.innerHTML = store.eventos.map(ev => `
+                <div class="p-3.5 bg-cardBg border border-slate-800 rounded-xl flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-amber-500/10 text-amber-400 rounded-lg">
+                            <i data-lucide="calendar" class="w-4 h-4"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-semibold text-slate-200">${ev.titulo}</h4>
+                            <p class="text-[11px] text-slate-400">${ev.fecha} ${ev.hora ? '• ' + ev.hora : ''}</p>
+                        </div>
+                    </div>
+                    <button onclick="deleteEvento(${ev.id})" class="text-slate-600 hover:text-rose-400 p-1">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function addEvento(e) {
+            e.preventDefault();
+            const titulo = document.getElementById('evento-titulo').value;
+            const fecha = document.getElementById('evento-fecha').value;
+            const hora = document.getElementById('evento-hora').value;
+
+            store.eventos.push({ id: Date.now(), titulo, fecha, hora });
+            document.getElementById('evento-titulo').value = '';
+            document.getElementById('evento-fecha').value = '';
+            document.getElementById('evento-hora').value = '';
+            save('eventos');
+        }
+
+        function deleteEvento(id) {
+            store.eventos = store.eventos.filter(e => e.id !== id);
+            save('eventos');
+        }
+
+        /* ================= RECETARIO MODULE ================= */
+        function renderRecetas() {
+            const container = document.getElementById('recetas-list');
+            if (store.recetas.length === 0) {
+                container.innerHTML = `<p class="text-center text-slate-500 text-xs py-6">Aún no hay recetas guardadas.</p>`;
+                return;
+            }
+
+            container.innerHTML = store.recetas.map(r => `
+                <div class="bg-cardBg border border-slate-800 rounded-2xl p-4 space-y-2">
+                    <div class="flex justify-between items-center">
+                        <h4 class="text-sm font-bold text-slate-200">${r.nombre}</h4>
+                        <button onclick="deleteReceta(${r.id})" class="text-slate-600 hover:text-rose-400">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                    ${r.ingredientes ? `<p class="text-xs text-amber-300/80 font-medium">🛒 ${r.ingredientes}</p>` : ''}
+                    ${r.pasos ? `<p class="text-xs text-slate-400 bg-slate-900/60 p-2.5 rounded-xl border border-slate-800/80">${r.pasos}</p>` : ''}
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function toggleRecetaForm() {
+            const form = document.getElementById('receta-form');
+            form.classList.toggle('hidden');
+        }
+
+        function addReceta(e) {
+            e.preventDefault();
+            const nombre = document.getElementById('receta-nombre').value;
+            const ingredientes = document.getElementById('receta-ingredientes').value;
+            const pasos = document.getElementById('receta-pasos').value;
+
+            store.recetas.unshift({ id: Date.now(), nombre, ingredientes, pasos });
+            document.getElementById('receta-nombre').value = '';
+            document.getElementById('receta-ingredientes').value = '';
+            document.getElementById('receta-pasos').value = '';
+            toggleRecetaForm();
+            save('recetas');
+        }
+
+        function deleteReceta(id) {
+            store.recetas = store.recetas.filter(r => r.id !== id);
+            save('recetas');
+        }
+
+        /* ================= GASTOS MODULE ================= */
+        function renderGastos() {
+            const container = document.getElementById('gastos-list');
+            const total = store.gastos.reduce((sum, g) => sum + parseFloat(g.importe || 0), 0);
+            
+            document.getElementById('dash-gastos-total').innerText = `${total.toFixed(2)}€`;
+            document.getElementById('gastos-total-badge').innerText = `${total.toFixed(2)} €`;
+
+            if (store.gastos.length === 0) {
+                container.innerHTML = `<p class="text-center text-slate-500 text-xs py-6">Sin gastos registrados este mes.</p>`;
+                return;
+            }
+
+            container.innerHTML = store.gastos.map(g => `
+                <div class="p-3 bg-cardBg border border-slate-800 rounded-xl flex items-center justify-between">
+                    <div>
+                        <h4 class="text-xs font-semibold text-slate-200">${g.concepto}</h4>
+                        <span class="text-[10px] text-indigo-400 font-medium">${g.persona}</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm font-bold text-slate-100">${parseFloat(g.importe).toFixed(2)} €</span>
+                        <button onclick="deleteGasto(${g.id})" class="text-slate-600 hover:text-rose-400">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function addGasto(e) {
+            e.preventDefault();
+            const concepto = document.getElementById('gasto-concepto').value;
+            const importe = document.getElementById('gasto-importe').value;
+            const persona = document.getElementById('gasto-persona').value;
+
+            store.gastos.unshift({ id: Date.now(), concepto, importe, persona });
+            document.getElementById('gasto-concepto').value = '';
+            document.getElementById('gasto-importe').value = '';
+            save('gastos');
+        }
+
+        function deleteGasto(id) {
+            store.gastos = store.gastos.filter(g => g.id !== id);
+            save('gastos');
+        }
+
+        /* ================= PARKING MODULE ================= */
+        function renderParking() {
+            const info = document.getElementById('parking-info');
+            const btnMapa = document.getElementById('btn-ver-mapa');
+            const statusBadge = document.getElementById('dash-parking-status');
+
+            if (!store.parking) {
+                info.innerHTML = `<p class="text-slate-500 text-xs">No hay ubicación guardada.</p>`;
+                btnMapa.classList.add('hidden');
+                statusBadge.innerText = 'Sin guardar';
+                statusBadge.classList.replace('bg-rose-500/20', 'bg-slate-800');
+                statusBadge.classList.replace('text-rose-300', 'text-slate-400');
+                return;
+            }
+
+            statusBadge.innerText = 'Guardado';
+            statusBadge.classList.replace('bg-slate-800', 'bg-rose-500/20');
+            statusBadge.classList.replace('text-slate-400', 'text-rose-300');
+
+            let html = '';
+            if (store.parking.coords) {
+                html += `<p class="text-xs font-semibold text-emerald-400 mb-1">📍 Coordenadas GPS guardadas</p>`;
+                html += `<p class="text-[11px] text-slate-400">${store.parking.fecha}</p>`;
+                btnMapa.classList.remove('hidden');
+            }
+            if (store.parking.nota) {
+                html += `<p class="text-xs text-slate-200 mt-2 font-medium">Nota: "${store.parking.nota}"</p>`;
+            }
+
+            info.innerHTML = html;
+        }
+
+        function guardarUbicacionParking() {
+            if (!navigator.geolocation) {
+                alert('La geolocalización no está soportada en este navegador.');
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    store.parking = {
+                        coords: {
+                            lat: pos.coords.latitude,
+                            lng: pos.coords.longitude
+                        },
+                        nota: store.parking?.nota || '',
+                        fecha: new Date().toLocaleString('es-ES')
+                    };
+                    save('parking');
+                },
+                () => {
+                    alert('No se pudo obtener la ubicación. Comprueba los permisos GPS del móvil.');
+                }
+            );
+        }
+
+        function guardarNotaParking() {
+            const nota = document.getElementById('parking-nota-input').value;
+            if (!nota.trim()) return;
+            store.parking = {
+                ...(store.parking || {}),
+                nota: nota.trim(),
+                fecha: new Date().toLocaleString('es-ES')
+            };
+            document.getElementById('parking-nota-input').value = '';
+            save('parking');
+        }
+
+        function abrirMapaParking() {
+            if (store.parking && store.parking.coords) {
+                const url = `https://www.google.com/maps/search/?api=1&query=${store.parking.coords.lat},${store.parking.coords.lng}`;
+                window.open(url, '_blank');
+            }
+        }
+
+        /* ================= RENDER & PWA SETUP ================= */
+        function renderApp() {
+            renderCompra();
+            renderEventos();
+            renderRecetas();
+            renderGastos();
+            renderParking();
+        }
+
+        function setupPWA() {
+            // Generate dynamic Web App Manifest for mobile installation
+            const manifestObj = {
+                name: "HogarTotal",
+                short_name: "HogarTotal",
+                start_url: ".",
+                display: "standalone",
+                background_color: "#0f172a",
+                theme_color: "#1e293b",
+                icons: [{
+                    src: "https://placehold.co/192x192/16a34a/ffffff?text=HT",
+                    sizes: "192x192",
+                    type: "image/png"
+                }]
+            };
+            const stringManifest = JSON.stringify(manifestObj);
+            const blob = new Blob([stringManifest], {type: 'application/json'});
+            const manifestURL = URL.createObjectURL(blob);
+            document.getElementById('manifest-placeholder').setAttribute('href', manifestURL);
+        }
     </script>
 </body>
 </html>
